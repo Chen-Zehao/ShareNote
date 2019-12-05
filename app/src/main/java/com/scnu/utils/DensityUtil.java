@@ -1,0 +1,62 @@
+package com.scnu.utils;
+
+import android.content.Context;
+import android.util.TypedValue;
+
+/**
+ * Created by ChenZehao
+ * on 2019/12/5
+ */
+/**
+ * 分辨率转换工具类
+ */
+public class DensityUtil {
+    /**
+     * 根据手机的分辨率从 dp 的单位 转成为 px(像素)
+     */
+    public static int dip2px(Context context, float dpValue) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
+    }
+
+    /**
+     * 根据手机的分辨率从 px(像素) 的单位 转成为 dp
+     */
+    public static int px2dip(Context context, float pxValue) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (pxValue / scale + 0.5f);
+    }
+
+    /**
+     * 将px值转换为sp值，保证文字大小不变
+     *
+     * @param pxValue （DisplayMetrics类中属性scaledDensity）
+     * @return
+     */
+    public static float px2sp(Context context, float pxValue) {
+        final float fontScale = context.getResources().getDisplayMetrics().scaledDensity;
+        return pxValue / fontScale + 0.5f;
+    }
+
+    /**
+     * 将sp值转换为px值，保证文字大小不变
+     *
+     * @param spValue （DisplayMetrics类中属性scaledDensity）
+     * @return
+     */
+    public static float sp2px(Context context, float spValue) {
+        final float fontScale = context.getResources().getDisplayMetrics().scaledDensity;
+        return spValue * fontScale + 0.5f;
+    }
+
+    /**
+     * dip转为sp
+     *
+     * @param context
+     * @param sp
+     * @return
+     */
+    public static int dip2sp(Context context, float sp) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, context.getResources().getDisplayMetrics());
+    }
+}
