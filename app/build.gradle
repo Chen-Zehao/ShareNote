@@ -1,8 +1,29 @@
 apply plugin: 'com.android.application'
+// 添加插件
+apply plugin: 'com.mob.sdk'
+
+
+def KeyStoreFile = 'E:\\AndroidStudioProjects\\ShareNote\\app\\ShareNote.keystore'
+def KeyStorePwd = 'sharenote'
+def KeyStoreAlias = 'sharenote'
+def KeyPwd = 'sharenote'
+
 
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.1"
+
+
+    //keyStore配置
+    signingConfigs {
+        myConfig {
+            storeFile file("$KeyStoreFile")
+            storePassword "$KeyStorePwd"
+            keyAlias "$KeyStoreAlias"
+            keyPassword "$KeyPwd"
+        }
+    }
+
     defaultConfig {
         applicationId "com.scnu.sharenote"
         minSdkVersion 16
@@ -12,12 +33,45 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
+
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    /**
+     * 打测试包：gradlew assembleDebug
+     * 打release包：gradlew assembleRelease
+     */
+    buildTypes {
+        debug {
+            minifyEnabled false
+            zipAlignEnabled false
+            shrinkResources false
+            signingConfig signingConfigs.myConfig
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+
+        release {
+            minifyEnabled true
+            zipAlignEnabled true
+            shrinkResources true
+            signingConfig signingConfigs.myConfig
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    /** apk */
+    android.applicationVariants.all { variant ->
+        variant.outputs.all {
+            def fileName = "ShareNote_${variant.buildType.name}_${variant.versionName}.apk"
+            outputFileName = fileName
+        }
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -67,7 +121,7 @@ dependencies {
     implementation 'com.github.razerdp:BasePopup:2.2.1'
 
     //沉浸式状态栏
-    implementation 'com.github.open-android:SystemBarTint:v1.0.0'
+    implementation 'com.jaeger.statusbarutil:library:1.5.1'
 
     //FlycoTabLayout
     implementation 'com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar'
@@ -92,3 +146,11 @@ dependencies {
     implementation  'com.wang.avi:library:2.1.3'
 
 }
+
+// 在MobSDK的扩展中注册SMSSDK的相关信息
+MobSDK {
+    appKey "2dce3f673e886"
+    appSecret "771c92a0c6442ac366b159aeebb82336"
+    SMSSDK {}
+}
+

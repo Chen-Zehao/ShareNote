@@ -1,0 +1,171 @@
+package com.scnu.sharenote.main;
+
+import android.os.Bundle;
+import android.util.Log;
+import android.widget.FrameLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+
+import com.baidu.mapapi.SDKInitializer;
+import com.flyco.tablayout.listener.CustomTabEntity;
+import com.scnu.base.BaseMvpActivity;
+import com.scnu.base.BaseMvpFragment;
+import com.scnu.sharenote.R;
+import com.scnu.sharenote.main.fragment.home.HomeFragment;
+import com.scnu.sharenote.main.fragment.mine.MineFragment;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnCheckedChanged;
+
+public class MainActivity extends BaseMvpActivity<IMainView, MainPresenter> implements IMainView {
+
+    private static final String TAG = "MainActivity";
+
+    @BindView(R.id.fl_main)
+    FrameLayout flMain;
+    @BindView(R.id.rb_home)
+    RadioButton rbHome;
+    @BindView(R.id.iv_new_content)
+    AppCompatImageView ivNewContent;
+    @BindView(R.id.rb_mine)
+    RadioButton rbMine;
+    @BindView(R.id.rg_bottom)
+    RadioGroup rgBottom;
+    private List<BaseMvpFragment> mFragment;
+
+    //选中的Fragment的对应的位置
+    private int position;
+    //上一个Fragment
+    private BaseMvpFragment mLastFragment;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        //SDKInitializer初始化要在setContentView之前
+        SDKInitializer.initialize(getApplicationContext());
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
+    }
+
+    @Override
+    public int getLayoutId() {
+        return R.layout.main_activity;
+    }
+
+    @Override
+    public void initHolder() {
+
+    }
+
+    @Override
+    public void initLayoutParams() {
+        mFragment = new ArrayList<>();
+        mFragment.add(new HomeFragment());
+        mFragment.add(new MineFragment());
+        rbHome.setChecked(true);
+    }
+
+    @Override
+    public void initData() {
+
+    }
+
+    @Override
+    public MainPresenter initPresenter() {
+        return new MainPresenter();
+    }
+
+
+    /**
+     * listener
+     */
+    @OnCheckedChanged({R.id.rb_home, R.id.rb_mine})
+    void onRadioButtonClicked(RadioButton radioButton) {
+        boolean checked = radioButton.isChecked();
+        switch (radioButton.getId()) {
+            case R.id.rb_home:
+                if (checked) {
+                    position = 0;
+                }
+                break;
+            case R.id.rb_mine:
+                if (checked) {
+                    position = 1;
+                }
+                break;
+        }
+        //根据位置得到对应的Fragment
+        BaseMvpFragment to = getFragment();
+        //替换
+        switchFrament(mLastFragment,to);
+    }
+
+    /**
+     *
+     * @param from 刚显示的Fragment,马上就要被隐藏了
+     * @param to 马上要切换到的Fragment，一会要显示
+     */
+    private void switchFrament(BaseMvpFragment from, BaseMvpFragment to) {
+        if(from != to){
+            mLastFragment = to;
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            //判断有没有被添加
+            if(!to.isAdded()){
+                //to没有被添加
+                //from隐藏
+                if(from != null){
+                    ft.hide(from);
+                }
+                //添加to
+                if(to != null){
+                    ft.add(R.id.fl_main,to).commit();
+                }
+            }else{
+                //to已经被添加
+                // from隐藏
+                if(from != null){
+                    ft.hide(from);
+                }
+                //显示to
+                if(to != null){
+                    ft.show(to).commit();
+                }
+            }
+        }
+
+    }
+
+
+    /**
+     * 根据位置得到对应的Fragment
+     * @return
+     */
+    private BaseMvpFragment getFragment() {
+        BaseMvpFragment fragment = mFragment.get(position);
+        return fragment;
+    }
+
+
+    @Override
+    public void showLoading() {
+
+    }
+
+    @Override
+    public void hideLoading() {
+
+    }
+
+    @Override
+    public void showMessage(String message) {
+
+    }
+
+}

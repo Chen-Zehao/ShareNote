@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorPrimary">#FFE0E0E0</color>
+    <color name="colorPrimaryDark">#14000000</color>
     <color name="colorAccent">#D81B60</color>
+    <color name="transparent">#00000000</color>
+    <color name="white"> #ffffff</color>
+    <color name="black"> #000000</color>
+    <color name="actionbar_bg">#FF0099EE</color>
+    <color name="statusbar_less_blue">#70C2BA</color>
+    <color name="statusbar_less_gray">#FFDFDFDF</color>
+
+    <color name="light_blue">#FFE7F7F5</color>
+
+    /*————————————————————字体颜色————————————————————*/
+    <color name="text_white">#FFFFFFFF</color>
+    <color name="text_black">#CC000000</color>
+    <color name="text_gray">#99000000</color>
+    <color name="caption_text_color">#66000000</color>
+    <color name="text_less_gray">#33000000</color>
+    <color name="text_orange">#FFE67445</color>
+    <color name="text_less_orange">#40E67445</color>
+    <color name="text_unable">#40000000</color>
+    /*————————————————————背景颜色————————————————————*/
+    <color name="bg_white">#FFFFFFFF</color>
+    <color name="bg_less_white">#FFF8F8F8</color>
+    <color name="bg_main">#FFF2F2F2</color>
+
+
 </resources>
