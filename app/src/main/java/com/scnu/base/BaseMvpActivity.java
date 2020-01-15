@@ -3,6 +3,7 @@ package com.scnu.base;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.baidu.mapapi.SDKInitializer;
+import com.jaeger.library.StatusBarUtil;
 import com.scnu.sharenote.R;
 import com.scnu.utils.AppManager;
 
@@ -43,6 +45,7 @@ public abstract class BaseMvpActivity<V extends BaseView, T extends BasePresente
         }
         mContext = this;
         ButterKnife.bind(this);
+        StatusBarUtil.setLightMode(this);
         initHolder();
         initData();
         initLayoutParams();

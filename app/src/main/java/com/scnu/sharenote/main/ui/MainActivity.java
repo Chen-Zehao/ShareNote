@@ -1,24 +1,21 @@
-package com.scnu.sharenote.main;
+package com.scnu.sharenote.main.ui;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.FrameLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
-import com.baidu.mapapi.SDKInitializer;
-import com.flyco.tablayout.listener.CustomTabEntity;
 import com.scnu.base.BaseMvpActivity;
 import com.scnu.base.BaseMvpFragment;
 import com.scnu.sharenote.R;
-import com.scnu.sharenote.main.fragment.home.HomeFragment;
-import com.scnu.sharenote.main.fragment.mine.MineFragment;
+import com.scnu.sharenote.main.presenter.MainPresenter;
+import com.scnu.sharenote.main.fragment.home.ui.HomeFragment;
+import com.scnu.sharenote.main.fragment.mine.ui.MineFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import androidx.appcompat.widget.AppCompatImageView;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -48,7 +45,7 @@ public class MainActivity extends BaseMvpActivity<IMainView, MainPresenter> impl
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //SDKInitializer初始化要在setContentView之前
-        SDKInitializer.initialize(getApplicationContext());
+//        SDKInitializer.initialize(getApplicationContext());
         super.onCreate(savedInstanceState);
         // TODO: add setContentView(...) invocation
         ButterKnife.bind(this);
