@@ -21,10 +21,14 @@
     <color name="text_orange">#FFE67445</color>
     <color name="text_less_orange">#40E67445</color>
     <color name="text_unable">#40000000</color>
+    <color name="text_theme">#FF1E88E5</color>
+    <color name="text_title">#D9000000</color>
+    <color name="text_content">#A6000000</color>
     /*————————————————————背景颜色————————————————————*/
     <color name="bg_white">#FFFFFFFF</color>
     <color name="bg_less_white">#FFF8F8F8</color>
     <color name="bg_main">#FFF2F2F2</color>
+
 
 
 </resources>

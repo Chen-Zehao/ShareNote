@@ -12,8 +12,8 @@ import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.baidu.mapapi.SDKInitializer;
+
 
 /**
  * 编写自己的Application，管理全局状态信息，比如Context
@@ -22,8 +22,6 @@ public class MyApplication extends Application {
 
     private static MyApplication mInstance;
     private static Context mContext;
-    private static Gson mBaseGson;
-    private static Gson mExposeGson;
     private static MediaPlayer mMediaDing;
 
     @Override
@@ -31,12 +29,7 @@ public class MyApplication extends Application {
         super.onCreate();
         mInstance = this;
         mContext = getApplicationContext();
-        mBaseGson = new Gson();
-        mExposeGson = new GsonBuilder()
-                .setVersion(2)
-                .excludeFieldsWithoutExposeAnnotation()
-                //.registerTypeAdapter(AuthStatusEnum.class,new AuthStatusEnumTypeAdapter())
-                .create();
+        SDKInitializer.initialize(getApplicationContext());
     }
 
     //获取MyApplication单例
@@ -46,13 +39,6 @@ public class MyApplication extends Application {
     //获取全局context
     public static Context getContextObject(){
         return mContext;
-    }
-    //gson
-    public static Gson getBaseGson(){
-        return mBaseGson;
-    }
-    public static Gson getExposeGson(){
-        return mExposeGson;
     }
 
     //提示信息

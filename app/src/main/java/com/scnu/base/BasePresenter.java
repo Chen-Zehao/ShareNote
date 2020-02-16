@@ -5,6 +5,8 @@ import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 
+import com.scnu.base.ui.BaseView;
+
 import java.lang.ref.WeakReference;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;

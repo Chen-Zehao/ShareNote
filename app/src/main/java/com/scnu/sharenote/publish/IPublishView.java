@@ -2,7 +2,7 @@ package com.scnu.sharenote.publish;
 
 import android.graphics.Bitmap;
 
-import com.scnu.base.BaseView;
+import com.scnu.base.ui.BaseView;
 
 /**
  * Created by ChenZehao

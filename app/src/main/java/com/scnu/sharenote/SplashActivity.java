@@ -4,8 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
+import android.view.WindowManager;
 
+import com.jaeger.library.StatusBarUtil;
 import com.scnu.sharenote.login.ui.LoginActivity;
 import com.scnu.sharenote.main.ui.MainActivity;
 import com.scnu.utils.MyApplication;
@@ -24,8 +25,9 @@ public class SplashActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-        setContentView(R.layout.splash_activity);
+        StatusBarUtil.setTransparent(this);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        setContentView(R.layout.activity_splash);
         ButterKnife.bind(this);
         mContext = this;
         isLogin = MyApplication.getParaValue("isLogin");

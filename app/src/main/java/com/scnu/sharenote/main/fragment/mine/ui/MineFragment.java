@@ -2,9 +2,10 @@ package com.scnu.sharenote.main.fragment.mine.ui;
 
 import android.view.View;
 
-import com.scnu.base.BaseMvpFragment;
+import com.scnu.base.ui.BaseMvpFragment;
 import com.scnu.sharenote.R;
 import com.scnu.sharenote.main.fragment.mine.presenter.MinePresenter;
+
 
 /**
  * Created by ChenZehao
@@ -24,11 +25,12 @@ public class MineFragment extends BaseMvpFragment<IMineView, MinePresenter> impl
     @Override
     public void initData() {
 
+
     }
 
     @Override
     public View initView() {
-        View view = View.inflate(mContext, R.layout.mine_fragment, null);
+        View view = View.inflate(mContext, R.layout.fragment_mine, null);
         return view;
     }
 
@@ -51,4 +53,5 @@ public class MineFragment extends BaseMvpFragment<IMineView, MinePresenter> impl
     public void showMessage(String message) {
 
     }
+
 }

@@ -1,6 +1,6 @@
 package com.scnu.sharenote.main.fragment.home.fragment.recommend.ui;
 
-import com.scnu.base.BaseView;
+import com.scnu.base.ui.BaseView;
 
 /**
  * Created by ChenZehao

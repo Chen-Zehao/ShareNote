@@ -3,7 +3,7 @@ package com.scnu.sharenote.main.fragment.home.ui;
 import android.view.View;
 
 import com.flyco.tablayout.SlidingTabLayout;
-import com.scnu.base.BaseMvpFragment;
+import com.scnu.base.ui.BaseMvpFragment;
 import com.scnu.sharenote.R;
 import com.scnu.sharenote.main.fragment.home.fragment.follow.ui.FollowFragment;
 import com.scnu.sharenote.main.fragment.home.fragment.local.ui.LocalFragment;
@@ -54,11 +54,13 @@ public class HomeFragment extends BaseMvpFragment<IHomeView, HomePresenter> impl
         mFragments.add(new LocalFragment());
         //关联TabLayout与ViewPager
         tlHeader.setViewPager(vpContent, new String[]{"关注", "推荐", "同城"},getActivity(),mFragments);
+        //初始显示推荐页面
+        tlHeader.setCurrentTab(1);
     }
 
     @Override
     public View initView() {
-        View view = View.inflate(mContext, R.layout.home_fragment, null);
+        View view = View.inflate(mContext, R.layout.fragment_home, null);
         return view;
     }
 

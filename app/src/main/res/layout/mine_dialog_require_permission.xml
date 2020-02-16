@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/dp_280"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_24"
+        android:layout_marginLeft="@dimen/dp_24"
+        android:text="定位服务未开启"
+        android:textSize="@dimen/sp_16"
+        android:textColor="#D9000000"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/tv_content"
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_24"
+        android:layout_marginRight="@dimen/dp_24"
+        android:layout_marginTop="@dimen/dp_8"
+        android:textColor="#A6000000"
+        android:textSize="@dimen/sp_12"
+        android:text="请在系统设置中开启“定位服务”，以便我们更好的为您服务！"
+        app:layout_constraintTop_toBottomOf="@id/tv_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <View
+        android:id="@+id/view1"
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="@dimen/dp_1"
+        android:background="#FFF2F2F2"
+        android:layout_marginTop="@dimen/dp_32"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_content"/>
+
+    <TextView
+        android:id="@+id/tv_choose"
+        android:text="手动输入"
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="@dimen/dp_48"
+        android:gravity="center"
+        android:textSize="@dimen/sp_14"
+        android:textColor="#A6000000"
+        app:layout_constraintTop_toBottomOf="@id/view1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/tv_open"/>
+
+    <View
+        android:layout_width="@dimen/dp_1"
+        android:layout_height="@dimen/dp_0"
+        android:background="#fff2f2f2"
+        app:layout_constraintTop_toTopOf="@id/view1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tv_choose"/>
+
+    <TextView
+        android:id="@+id/tv_open"
+        android:text="去开启"
+        android:textSize="@dimen/sp_14"
+        android:textColor="#FFE67445"
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="@dimen/dp_48"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/view1"
+        app:layout_constraintStart_toEndOf="@id/tv_choose"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

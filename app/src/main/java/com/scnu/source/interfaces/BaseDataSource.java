@@ -1,6 +1,8 @@
 package com.scnu.source.interfaces;
 
 
+import com.scnu.source.http.CustomObserver;
+
 import androidx.annotation.NonNull;
 
 /**
@@ -9,6 +11,6 @@ import androidx.annotation.NonNull;
  */
 public interface BaseDataSource {
 
-    void versionCheck(@NonNull BaseCallBack callback);
+    void versionCheck(CustomObserver callback);
 
 }

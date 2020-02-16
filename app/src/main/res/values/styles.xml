@@ -27,6 +27,13 @@
         <item name="android:taskToBackExitAnimation">@null</item>
     </style>
 
+    <!-- dialog -->
+    <style name="center_dialog" parent="@style/Base.Theme.AppCompat.Dialog">
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowBackground">@drawable/shape_center_dialog</item>
+        <item name="android:windowSoftInputMode">stateHidden</item>
+    </style>
+
     <!-- 从下往上的Dialog -->
     <style name="moveUpDialog" parent="@android:style/Theme.Dialog">
         <!-- 是否有边框 -->

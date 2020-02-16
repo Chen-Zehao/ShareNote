@@ -2,7 +2,6 @@ package com.scnu.sharenote.publish;
 
 import android.Manifest;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -14,10 +13,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.widget.Button;
 
-import com.scnu.base.BaseMvpActivity;
+import com.scnu.base.ui.BaseMvpActivity;
 import com.scnu.sharenote.R;
 
 import java.io.File;
@@ -54,7 +52,7 @@ public class PublishActivity extends BaseMvpActivity<IPublishView, PublishPresen
 
     @Override
     public int getLayoutId() {
-        return R.layout.publish_activity;
+        return R.layout.activity_publish;
     }
 
     @Override

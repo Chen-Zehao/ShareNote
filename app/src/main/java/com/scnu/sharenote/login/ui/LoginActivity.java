@@ -13,7 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jaeger.library.StatusBarUtil;
-import com.scnu.base.BaseMvpActivity;
+import com.scnu.base.ui.BaseMvpActivity;
 import com.scnu.sharenote.R;
 import com.scnu.sharenote.login.presenter.LoginPresenter;
 import com.scnu.sharenote.main.ui.MainActivity;
@@ -48,7 +48,7 @@ public class LoginActivity extends BaseMvpActivity<ILoginView, LoginPresenter> i
 
     @Override
     public int getLayoutId() {
-        return R.layout.login_activity;
+        return R.layout.activity_login;
     }
 
     @Override

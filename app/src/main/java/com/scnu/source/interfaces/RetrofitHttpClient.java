@@ -1,8 +1,6 @@
 package com.scnu.source.interfaces;
 
 
-
-
 import java.util.Map;
 
 import io.reactivex.Observable;

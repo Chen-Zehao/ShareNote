@@ -6,16 +6,14 @@ package com.scnu.source.beans;
  * on 2019/12/5
  */
 
-import com.google.gson.annotations.Expose;
 
 /**
  * 封装json对象，所有返回结果都使用它
  */
 public class BaseBean<T> {
 
-    @Expose
     private int ResCode;
-    @Expose
+
     private String ResDisc;
 
     public BaseBean(){

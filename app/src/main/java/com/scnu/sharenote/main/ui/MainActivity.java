@@ -5,8 +5,9 @@ import android.widget.FrameLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
-import com.scnu.base.BaseMvpActivity;
-import com.scnu.base.BaseMvpFragment;
+import com.baidu.mapapi.SDKInitializer;
+import com.scnu.base.ui.BaseMvpActivity;
+import com.scnu.base.ui.BaseMvpFragment;
 import com.scnu.sharenote.R;
 import com.scnu.sharenote.main.presenter.MainPresenter;
 import com.scnu.sharenote.main.fragment.home.ui.HomeFragment;
@@ -44,8 +45,6 @@ public class MainActivity extends BaseMvpActivity<IMainView, MainPresenter> impl
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //SDKInitializer初始化要在setContentView之前
-//        SDKInitializer.initialize(getApplicationContext());
         super.onCreate(savedInstanceState);
         // TODO: add setContentView(...) invocation
         ButterKnife.bind(this);
@@ -53,7 +52,7 @@ public class MainActivity extends BaseMvpActivity<IMainView, MainPresenter> impl
 
     @Override
     public int getLayoutId() {
-        return R.layout.main_activity;
+        return R.layout.activity_main;
     }
 
     @Override

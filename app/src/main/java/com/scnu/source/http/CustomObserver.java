@@ -1,11 +1,14 @@
 package com.scnu.source.http;
 
 
+import android.content.Context;
 import android.util.Log;
 
+import com.scnu.base.ui.BaseLoadingDialog;
 import com.scnu.source.beans.BaseBean;
 import com.scnu.source.interfaces.BaseCallBack;
 
+import androidx.fragment.app.FragmentManager;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 import okhttp3.ResponseBody;
@@ -14,17 +17,35 @@ import okhttp3.ResponseBody;
  * Created by ChenZehao
  * on 2019/12/5
  */
-public class CustomObserver<T> implements Observer<T> {
+public abstract class CustomObserver<T> implements Observer<T> {
+
+    private BaseLoadingDialog mLoadingDialog;
+
+    private Context mContext;
+    private FragmentManager mFragmentManager;
 
     private BaseCallBack<T> callBack;
 
-    public CustomObserver(BaseCallBack callBack) {
-        this.callBack = callBack;
+    public CustomObserver(Context context, FragmentManager fragmentManager) {
+        this.mFragmentManager = fragmentManager;
+        mLoadingDialog = BaseLoadingDialog.getInstance(context);
+    }
+
+    private void showLoadingDialog(){
+        if (null != mLoadingDialog) {
+            mLoadingDialog.show(mFragmentManager,null);
+        }
+    }
+
+    private void dismissDialog(){
+        if (null != mLoadingDialog && mLoadingDialog.isVisible()) {
+            mLoadingDialog.dismissAllowingStateLoss();
+        }
     }
 
     @Override
     public void onSubscribe(Disposable d) {
-
+            showLoadingDialog();
     }
 
     @Override
@@ -43,6 +64,7 @@ public class CustomObserver<T> implements Observer<T> {
 
     @Override
     public void onError(Throwable e) {
+        onComplete();
         if (e != null && e.getMessage() != null) {
             Log.i("onError", e.toString());
             callBack.onDataNotAvailable(e);
@@ -51,6 +73,6 @@ public class CustomObserver<T> implements Observer<T> {
 
     @Override
     public void onComplete() {
-
+        dismissDialog();
     }
 }

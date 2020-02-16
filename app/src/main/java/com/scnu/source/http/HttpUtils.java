@@ -21,7 +21,7 @@ import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.fastjson.FastJsonConverterFactory;
 
 
 /**
@@ -52,7 +52,7 @@ public class HttpUtils {
         Retrofit retrofit = new Retrofit.Builder()
                 .client(httpClient)
                 .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create(MyApplication.getExposeGson()))
+                .addConverterFactory(FastJsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
         return retrofit.create(RetrofitHttpClient.class);

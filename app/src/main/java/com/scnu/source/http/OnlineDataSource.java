@@ -31,11 +31,11 @@ public class OnlineDataSource implements BaseDataSource {
     }
 
     @Override
-    public void versionCheck(@NonNull BaseCallBack callback) {
+    public void versionCheck(CustomObserver callback) {
 //        HttpUtils.getInstance().getUpdateServer().versionCheck()
 //                .subscribeOn(Schedulers.io())
 //                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new CustomObserver<>(callback));
+//                .subscribe(callback);
     }
 
 }
