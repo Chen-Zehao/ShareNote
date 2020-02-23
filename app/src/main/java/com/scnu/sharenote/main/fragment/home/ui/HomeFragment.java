@@ -1,9 +1,7 @@
 package com.scnu.sharenote.main.fragment.home.ui;
 
-import android.view.View;
-
 import com.flyco.tablayout.SlidingTabLayout;
-import com.scnu.base.ui.BaseMvpFragment;
+import com.scnu.base.ui.fragment.BaseMvpFragment;
 import com.scnu.sharenote.R;
 import com.scnu.sharenote.main.fragment.home.fragment.follow.ui.FollowFragment;
 import com.scnu.sharenote.main.fragment.home.fragment.local.ui.LocalFragment;
@@ -36,18 +34,14 @@ public class HomeFragment extends BaseMvpFragment<IHomeView, HomePresenter> impl
 
     private ArrayList<Fragment> mFragments;
 
-    @Override
-    public void initHolder() {
 
+    @Override
+    protected int getLayoutId() {
+        return R.layout.fragment_home;
     }
 
     @Override
-    public void initLayoutParams() {
-
-    }
-
-    @Override
-    public void initData() {
+    public void initView() {
         mFragments = new ArrayList<>();
         mFragments.add(new FollowFragment());
         mFragments.add(new RecommendFragment());
@@ -59,10 +53,9 @@ public class HomeFragment extends BaseMvpFragment<IHomeView, HomePresenter> impl
     }
 
     @Override
-    public View initView() {
-        View view = View.inflate(mContext, R.layout.fragment_home, null);
-        return view;
+    public void initData() {
     }
+
 
     @Override
     public HomePresenter initPresenter() {

@@ -75,7 +75,7 @@ public class MyApplication extends Application {
     public static void setParaValue(String key, String value){
         SharedPreferences.Editor editor = mContext.getSharedPreferences("ShareNote", MODE_PRIVATE).edit();
         editor.putString(key,value);//editor.clear();editor.remove();
-        editor.commit();
+        editor.apply();
     }
     public static String getParaValue(String key){
         SharedPreferences read = mContext.getSharedPreferences("ShareNote", MODE_PRIVATE);

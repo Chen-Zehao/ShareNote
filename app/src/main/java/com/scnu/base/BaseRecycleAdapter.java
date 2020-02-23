@@ -68,8 +68,8 @@ public abstract class BaseRecycleAdapter<T> extends RecyclerView.Adapter<BaseVie
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (onItemClickListner != null){
-                    onItemClickListner.onItemClickListner(v,holder.getLayoutPosition());
+                if (onItemClickListener != null){
+                    onItemClickListener.onItemClick(v,holder.getLayoutPosition());
                 }
             }
         });
@@ -77,8 +77,8 @@ public abstract class BaseRecycleAdapter<T> extends RecyclerView.Adapter<BaseVie
         view.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                if (onItemLongClickListner != null) {
-                    onItemLongClickListner.onItemLongClickListner(v, holder.getLayoutPosition());
+                if (onItemLongClickListener != null) {
+                    onItemLongClickListener.onItemLongClick(v, holder.getLayoutPosition());
                 }
                 return false;
             }
@@ -102,22 +102,22 @@ public abstract class BaseRecycleAdapter<T> extends RecyclerView.Adapter<BaseVie
      * 响应事件
      */
 
-    public interface OnItemClickListner {
-        void onItemClickListner(View v, int position);
+    public interface OnItemClickListener {
+        void onItemClick(View v, int position);
     }
 
-    public interface OnItemLongClickListner {
-        void onItemLongClickListner(View v, int position);
+    public interface OnItemLongClickListener {
+        void onItemLongClick(View v, int position);
     }
 
-    private OnItemClickListner onItemClickListner;//单击事件
-    private OnItemLongClickListner onItemLongClickListner;//长按单击事件
+    private OnItemClickListener onItemClickListener;//单击事件
+    private OnItemLongClickListener onItemLongClickListener;//长按单击事件
 
-    public void setOnItemClickListner(OnItemClickListner onItemClickListner) {
-        this.onItemClickListner = onItemClickListner;
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
     }
 
-    public void setOnItemLongClickListner(OnItemLongClickListner onItemLongClickListner) {
-        this.onItemLongClickListner = onItemLongClickListner;
+    public void setOnItemLongClickListener(OnItemLongClickListener onItemLongClickListener) {
+        this.onItemLongClickListener = onItemLongClickListener;
     }
 }

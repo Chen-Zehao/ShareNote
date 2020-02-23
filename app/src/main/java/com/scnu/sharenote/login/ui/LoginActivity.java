@@ -13,13 +13,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jaeger.library.StatusBarUtil;
-import com.scnu.base.ui.BaseMvpActivity;
+import com.scnu.base.ui.activity.BaseMvpActivity;
 import com.scnu.sharenote.R;
 import com.scnu.sharenote.login.presenter.LoginPresenter;
 import com.scnu.sharenote.main.ui.MainActivity;
 import com.scnu.utils.AppManager;
 import com.scnu.utils.CountDownTimerUtils;
 import com.scnu.utils.MyApplication;
+import com.scnu.utils.ToastUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -51,11 +52,6 @@ public class LoginActivity extends BaseMvpActivity<ILoginView, LoginPresenter> i
         return R.layout.activity_login;
     }
 
-    @Override
-    public void initHolder() {
-
-    }
-
     /**
      * StatusBarUtil设置
      * StatusBarUtil.setColor(Activity activity, int color) 设置颜色
@@ -66,7 +62,7 @@ public class LoginActivity extends BaseMvpActivity<ILoginView, LoginPresenter> i
      */
 
     @Override
-    public void initLayoutParams() {
+    public void initView() {
         StatusBarUtil.setLightMode(this);
         btLogin.setEnabled(false);
         initListener();
@@ -146,10 +142,8 @@ public class LoginActivity extends BaseMvpActivity<ILoginView, LoginPresenter> i
             }
         } else if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {//提交验证码
             if (result == SMSSDK.RESULT_COMPLETE) {//验证成功
-                Toast.makeText(this, R.string.smssdk_identify_success, Toast.LENGTH_SHORT).show();
                 MyApplication.setParaValue("isLogin","Y");
-                startActivity(new Intent(mContext, MainActivity.class));
-                finish();
+                presenter.userLogin(etMobile.getText().toString());
             } else {
                 Toast.makeText(this, R.string.smssdk_virificaition_code_wrong, Toast.LENGTH_SHORT).show();
                 ((Throwable) data).printStackTrace();
@@ -238,7 +232,6 @@ public class LoginActivity extends BaseMvpActivity<ILoginView, LoginPresenter> i
 
     @Override
     public void showMessage(String message) {
-
     }
 
     @Override
@@ -271,4 +264,10 @@ public class LoginActivity extends BaseMvpActivity<ILoginView, LoginPresenter> i
         }
     }
 
+    @Override
+    public void userLoginSuccess() {
+        ToastUtils.showToast(mContext,"登录成功");
+        startActivity(new Intent(mContext, MainActivity.class));
+        finish();
+    }
 }

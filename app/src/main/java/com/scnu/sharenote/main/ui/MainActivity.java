@@ -1,17 +1,18 @@
 package com.scnu.sharenote.main.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.FrameLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
-import com.baidu.mapapi.SDKInitializer;
-import com.scnu.base.ui.BaseMvpActivity;
-import com.scnu.base.ui.BaseMvpFragment;
+import com.scnu.base.ui.activity.BaseMvpActivity;
+import com.scnu.base.ui.fragment.BaseMvpFragment;
 import com.scnu.sharenote.R;
 import com.scnu.sharenote.main.presenter.MainPresenter;
 import com.scnu.sharenote.main.fragment.home.ui.HomeFragment;
 import com.scnu.sharenote.main.fragment.mine.ui.MineFragment;
+import com.scnu.sharenote.publish.ui.PublishActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +22,7 @@ import androidx.fragment.app.FragmentTransaction;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
+import butterknife.OnClick;
 
 public class MainActivity extends BaseMvpActivity<IMainView, MainPresenter> implements IMainView {
 
@@ -56,12 +58,7 @@ public class MainActivity extends BaseMvpActivity<IMainView, MainPresenter> impl
     }
 
     @Override
-    public void initHolder() {
-
-    }
-
-    @Override
-    public void initLayoutParams() {
+    public void initView() {
         mFragment = new ArrayList<>();
         mFragment.add(new HomeFragment());
         mFragment.add(new MineFragment());
@@ -146,6 +143,11 @@ public class MainActivity extends BaseMvpActivity<IMainView, MainPresenter> impl
     private BaseMvpFragment getFragment() {
         BaseMvpFragment fragment = mFragment.get(position);
         return fragment;
+    }
+
+    @OnClick(R.id.iv_new_content)
+    void btnPublishClicked(){
+        startActivity(new Intent(mContext, PublishActivity.class));
     }
 
 

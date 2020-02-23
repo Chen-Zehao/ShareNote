@@ -1,8 +1,8 @@
 package com.scnu.sharenote.main.fragment.home.fragment.follow.ui;
 
-import android.view.View;
-
-import com.scnu.base.ui.BaseMvpFragment;
+import com.scnu.base.ui.fragment.BaseMvpFragment;
+import com.scnu.base.ui.fragment.RefreshFragment;
+import com.scnu.base.ui.fragment.RefreshListener;
 import com.scnu.model.Article;
 import com.scnu.model.User;
 import com.scnu.sharenote.R;
@@ -20,22 +20,18 @@ import butterknife.BindView;
  * Created by ChenZehao
  * on 2020/1/15
  */
-public class FollowFragment extends BaseMvpFragment<IFollowView,FollowPresenter> implements IFollowView {
-
-    @BindView(R.id.rv_article)
-    RecyclerView rvArticle;
+public class FollowFragment extends RefreshFragment<IFollowView,FollowPresenter> implements IFollowView,RefreshListener {
 
     private List<Article> articleList;
 
-    private ArticleAdapter articleAdapter;
-
     @Override
-    public void initHolder() {
+    public void initData() {
 
     }
 
     @Override
-    public void initLayoutParams() {
+    public RecyclerView.Adapter createAdapter() {
+
         articleList = new ArrayList<>();
         for(int i = 0; i < 10; i++){
             Article article = new Article();
@@ -58,19 +54,27 @@ public class FollowFragment extends BaseMvpFragment<IFollowView,FollowPresenter>
             article.setLocation("广东·广州");
             articleList.add(article);
         }
-        articleAdapter = new ArticleAdapter(mContext,articleList);
-        rvArticle.setLayoutManager(new LinearLayoutManager(mContext,LinearLayoutManager.VERTICAL,false));
-        rvArticle.setAdapter(articleAdapter);
+        return new ArticleAdapter(mContext,articleList);
     }
 
     @Override
-    public void initData() {
-
+    public RecyclerView.LayoutManager createLayoutManager() {
+        return new LinearLayoutManager(mContext,LinearLayoutManager.VERTICAL,false);
     }
 
     @Override
-    public View initView() {
-        return View.inflate(mContext, R.layout.fragment_follow, null);
+    public RefreshListener getRefreshListener() {
+        return this;
+    }
+
+    @Override
+    public boolean isNeedRefresh() {
+        return true;
+    }
+
+    @Override
+    public boolean isNeedLoadMore() {
+        return true;
     }
 
     @Override
@@ -90,6 +94,16 @@ public class FollowFragment extends BaseMvpFragment<IFollowView,FollowPresenter>
 
     @Override
     public void showMessage(String message) {
+
+    }
+
+    @Override
+    public void onRefresh() {
+
+    }
+
+    @Override
+    public void onLoadMore() {
 
     }
 }

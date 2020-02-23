@@ -1,13 +1,12 @@
 package com.scnu.source.interfaces;
 
 
+import com.scnu.source.beans.LoginResBean;
+
 import java.util.Map;
 
 import io.reactivex.Observable;
-import okhttp3.ResponseBody;
 import retrofit2.http.Body;
-import retrofit2.http.GET;
-import retrofit2.http.Headers;
 import retrofit2.http.POST;
 
 /**
@@ -17,7 +16,7 @@ import retrofit2.http.POST;
  */
 public interface RetrofitHttpClient {
 
-    @GET("/android/version.xml")
-    Observable<ResponseBody> versionCheck();
+    @POST("/phone/user_login")
+    Observable<LoginResBean> userLogin(@Body Map<String, String> params);
 
 }

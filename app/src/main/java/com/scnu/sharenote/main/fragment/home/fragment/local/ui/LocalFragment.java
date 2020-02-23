@@ -1,23 +1,22 @@
 package com.scnu.sharenote.main.fragment.home.fragment.local.ui;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.pm.PackageManager;
-import android.os.Handler;
 import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.baidu.location.BDLocationListener;
+import com.alibaba.fastjson.JSON;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
-import com.scnu.base.ui.BaseMvpFragment;
+import com.scnu.base.ui.fragment.BaseMvpFragment;
+import com.scnu.base.ui.fragment.RefreshFragment;
+import com.scnu.base.ui.fragment.RefreshListener;
 import com.scnu.custom.citypicker.CityLocationListener;
 import com.scnu.custom.citypicker.CityPicker;
 import com.scnu.eventbusmodel.LocationInfoEvent;
-import com.scnu.eventbusmodel.RequirePermissionEvent;
 import com.scnu.model.Article;
 import com.scnu.model.User;
 import com.scnu.sharenote.R;
@@ -26,10 +25,10 @@ import com.scnu.sharenote.main.fragment.home.fragment.local.presenter.LocalPrese
 import com.scnu.utils.LogUtils;
 import com.zaaach.citypicker.adapter.OnPickListener;
 import com.zaaach.citypicker.model.City;
-import com.zaaach.citypicker.model.HotCity;
 import com.zaaach.citypicker.model.LocateState;
 import com.zaaach.citypicker.model.LocatedCity;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -38,7 +37,6 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
@@ -49,30 +47,23 @@ import static com.scnu.model.Macro.REQUEST_PERMISSION_ACCESS_FINE_LOCATION;
  * Created by ChenZehao
  * on 2020/1/15
  */
-public class LocalFragment extends BaseMvpFragment<ILocalView, LocalPresenter> implements ILocalView {
-
-    @BindView(R.id.rv_article)
-    RecyclerView rvArticle;
+public class LocalFragment extends RefreshFragment<ILocalView, LocalPresenter> implements ILocalView,RefreshListener {
 
     private List<Article> articleList;
-
     private ArticleAdapter articleAdapter;
 
     public LocationClient mLocationClient = null;
     private CityLocationListener cityLocationListener;
 
     @Override
-    public void initHolder() {
-
-    }
-
-    @Override
-    public void initLayoutParams() {
-
+    protected int getLayoutId() {
+        return R.layout.fragment_local;
     }
 
     @Override
     public void initData() {
+        //注册事件
+        EventBus.getDefault().register(this);
         cityLocationListener = new CityLocationListener();
         //声明LocationClient类
         mLocationClient = new LocationClient(mContext);
@@ -83,11 +74,24 @@ public class LocalFragment extends BaseMvpFragment<ILocalView, LocalPresenter> i
         option.setIsNeedAddress(true);
         //需将配置好的LocationClientOption对象，通过setLocOption方法传递给LocationClient对象使用
         mLocationClient.setLocOption(option);
+
     }
 
     @Override
-    public View initView() {
-        return View.inflate(mContext, R.layout.fragment_local, null);
+    public RecyclerView.Adapter createAdapter() {
+        articleList = new ArrayList<>();
+        articleAdapter = new ArticleAdapter(mContext, articleList);
+        return articleAdapter;
+    }
+
+    @Override
+    public RecyclerView.LayoutManager createLayoutManager() {
+        return new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
+    }
+
+    @Override
+    public RefreshListener getRefreshListener() {
+        return this;
     }
 
     @Override
@@ -163,6 +167,7 @@ public class LocalFragment extends BaseMvpFragment<ILocalView, LocalPresenter> i
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(LocationInfoEvent event){
+        LogUtils.e(JSON.toJSONString(event));
         CityPicker.from(LocalFragment.this)
                 .locateComplete(new LocatedCity(event.getCity(), event.getProvince(), "0"), LocateState.SUCCESS);
     }
@@ -174,8 +179,6 @@ public class LocalFragment extends BaseMvpFragment<ILocalView, LocalPresenter> i
         switch (requestCode) {
             case REQUEST_PERMISSION_ACCESS_FINE_LOCATION:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    articleList = new ArrayList<>();
                     for (int i = 0; i < 10; i++) {
                         Article article = new Article();
                         User user = new User();
@@ -197,9 +200,7 @@ public class LocalFragment extends BaseMvpFragment<ILocalView, LocalPresenter> i
                         article.setLocation("广东·广州");
                         articleList.add(article);
                     }
-                    articleAdapter = new ArticleAdapter(mContext, articleList);
-                    rvArticle.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
-                    rvArticle.setAdapter(articleAdapter);
+                    articleAdapter.notifyDataSetChanged();
                 } else {
                     Toast.makeText(getContext(), "位置权限被拒绝", Toast.LENGTH_SHORT).show();
                 }
@@ -222,7 +223,18 @@ public class LocalFragment extends BaseMvpFragment<ILocalView, LocalPresenter> i
 
     @Override
     public void onDestroy() {
+        EventBus.getDefault().unregister(this);
         mLocationClient.unRegisterLocationListener(cityLocationListener);
         super.onDestroy();
+    }
+
+    @Override
+    public void onRefresh() {
+
+    }
+
+    @Override
+    public void onLoadMore() {
+
     }
 }

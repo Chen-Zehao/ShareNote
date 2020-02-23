@@ -1,6 +1,5 @@
 package com.scnu.sharenote.detail;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -11,7 +10,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.scnu.base.ui.BaseMvpActivity;
+import com.scnu.base.ui.activity.BaseMvpActivity;
 import com.scnu.custom.CircleImageView;
 import com.scnu.model.Article;
 import com.scnu.sharenote.R;
@@ -113,14 +112,10 @@ public class DetailActivity extends BaseMvpActivity<IDetailView, DetailPresenter
     }
 
     @Override
-    public void initHolder() {
+    public void initView() {
 
     }
 
-    @Override
-    public void initLayoutParams() {
-
-    }
 
     @Override
     public void initData() {

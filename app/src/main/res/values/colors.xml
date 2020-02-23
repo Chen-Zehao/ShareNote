@@ -28,7 +28,7 @@
     <color name="bg_white">#FFFFFFFF</color>
     <color name="bg_less_white">#FFF8F8F8</color>
     <color name="bg_main">#FFF2F2F2</color>
-
+    <color name="color_f6">#f6f6f6</color>
 
 
 </resources>

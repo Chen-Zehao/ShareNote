@@ -1,4 +1,4 @@
-package com.scnu.base.ui;
+package com.scnu.base.ui.dialog;
 
 import android.app.Dialog;
 import android.content.Context;

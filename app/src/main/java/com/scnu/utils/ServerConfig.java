@@ -17,8 +17,8 @@ public class ServerConfig {
     private ServerConfig(){
         //初始化
         mContext = MyApplication.getContextObject();
-        appServerIP = "";
-        appServerPort = "";
+        appServerIP = "134.175.233.92";
+        appServerPort = "8080";
     }
 
     private static ServerConfig instance;

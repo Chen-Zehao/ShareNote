@@ -1,13 +1,11 @@
 package com.scnu.source.http;
 
 
-import com.scnu.source.interfaces.BaseCallBack;
 import com.scnu.source.interfaces.BaseDataSource;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import androidx.annotation.NonNull;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -31,11 +29,13 @@ public class OnlineDataSource implements BaseDataSource {
     }
 
     @Override
-    public void versionCheck(CustomObserver callback) {
-//        HttpUtils.getInstance().getUpdateServer().versionCheck()
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(callback);
+    public void userLogin(String mobileNo, CustomObserver callback) {
+        Map<String,String> params = new HashMap<>();
+        params.put("mobileNo", mobileNo);
+        HttpUtils.getInstance().getAppServer().userLogin(params)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(callback);
     }
 
 }

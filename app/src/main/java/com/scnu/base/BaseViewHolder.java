@@ -28,7 +28,6 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
         this.context = context;
         this.view = itemView;
-        ButterKnife.bind(this,view);
     }
 
     public void setText(int id, String text) {

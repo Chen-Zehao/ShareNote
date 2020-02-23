@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.view.View;
 
 import com.scnu.base.BaseRecycleAdapter;
-import com.scnu.base.ui.BaseMvpFragment;
+import com.scnu.base.ui.fragment.BaseMvpFragment;
+import com.scnu.base.ui.fragment.RefreshFragment;
+import com.scnu.base.ui.fragment.RefreshListener;
 import com.scnu.model.Article;
 import com.scnu.model.User;
 import com.scnu.sharenote.R;
@@ -23,25 +25,18 @@ import butterknife.BindView;
  * Created by ChenZehao
  * on 2020/1/15
  */
-public class RecommendFragment extends BaseMvpFragment<IRecommendView, RecommendPresenter> implements IRecommendView {
-    @BindView(R.id.rv_article)
-    RecyclerView rvArticle;
+public class RecommendFragment extends RefreshFragment<IRecommendView, RecommendPresenter> implements IRecommendView,RefreshListener {
 
     private List<Article> articleList;
 
-    private ArticleAdapter articleAdapter;
-
-    @Override
-    public void initHolder() {
-
-    }
-
-    @Override
-    public void initLayoutParams() {
-    }
-
     @Override
     public void initData() {
+
+    }
+
+
+    @Override
+    public RecyclerView.Adapter createAdapter() {
 
         articleList = new ArrayList<>();
         for(int i = 0; i < 10; i++){
@@ -65,22 +60,28 @@ public class RecommendFragment extends BaseMvpFragment<IRecommendView, Recommend
             article.setLocation("广东·广州");
             articleList.add(article);
         }
-        articleAdapter = new ArticleAdapter(mContext,articleList);
-        rvArticle.setLayoutManager(new LinearLayoutManager(mContext,LinearLayoutManager.VERTICAL,false));
-        rvArticle.setAdapter(articleAdapter);
-        articleAdapter.setOnItemClickListner(new BaseRecycleAdapter.OnItemClickListner() {
-            @Override
-            public void onItemClickListner(View v, int position) {
-                Intent intent = new Intent(mContext, DetailActivity.class);
-                intent.putExtra("detail",articleList.get(position));
-                startActivity(intent);
-            }
-        });
+        return new ArticleAdapter(mContext,articleList);
     }
 
     @Override
-    public View initView() {
-        return View.inflate(mContext, R.layout.fragment_recommend, null);
+    public RecyclerView.LayoutManager createLayoutManager() {
+        return new LinearLayoutManager(mContext,LinearLayoutManager.VERTICAL,false);
+    }
+
+
+    @Override
+    public RefreshListener getRefreshListener() {
+        return this;
+    }
+
+    @Override
+    public boolean isNeedRefresh() {
+        return true;
+    }
+
+    @Override
+    public boolean isNeedLoadMore() {
+        return true;
     }
 
     @Override
@@ -100,6 +101,16 @@ public class RecommendFragment extends BaseMvpFragment<IRecommendView, Recommend
 
     @Override
     public void showMessage(String message) {
+
+    }
+
+    @Override
+    public void onRefresh() {
+
+    }
+
+    @Override
+    public void onLoadMore() {
 
     }
 }

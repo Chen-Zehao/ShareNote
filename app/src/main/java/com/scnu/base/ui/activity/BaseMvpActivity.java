@@ -1,4 +1,4 @@
-package com.scnu.base.ui;
+package com.scnu.base.ui.activity;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import com.jaeger.library.StatusBarUtil;
 import com.scnu.base.BasePresenter;
+import com.scnu.base.ui.BaseView;
 import com.scnu.utils.AppManager;
 
 import org.greenrobot.eventbus.EventBus;
@@ -39,12 +40,10 @@ public abstract class BaseMvpActivity<V extends BaseView, T extends BasePresente
         mContext = this;
         ButterKnife.bind(this);
         StatusBarUtil.setLightMode(this);
-        StatusBarUtil.setColor(this,Color.WHITE,0);
         //注册事件
         EventBus.getDefault().register(this);
-        initHolder();
+        initView();
         initData();
-        initLayoutParams();
         AppManager.getInstance().addActivity(this);
 
     }
@@ -63,14 +62,10 @@ public abstract class BaseMvpActivity<V extends BaseView, T extends BasePresente
     public abstract int getLayoutId();
 
     /**
-     * 初始化控件
+     * 初始化界面
      */
-    public abstract void initHolder();
+    public abstract void initView();
 
-    /**
-     * 初始化布局
-     */
-    public abstract void initLayoutParams();
 
     /**
      * 初始化数据

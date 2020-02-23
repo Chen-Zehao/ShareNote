@@ -12,28 +12,28 @@ package com.scnu.source.beans;
  */
 public class BaseBean<T> {
 
-    private int ResCode;
+    private String resCode;
 
-    private String ResDisc;
+    private String resDisc;
 
     public BaseBean(){
-        ResCode = -1;
-        ResDisc = "";
+        resCode = "";
+        resDisc = "";
     }
 
-    public int getResCode() {
-        return ResCode;
+    public String getResCode() {
+        return resCode;
     }
 
-    public void setResCode(int resCode) {
-        ResCode = resCode;
+    public void setResCode(String resCode) {
+        this.resCode = resCode;
     }
 
     public String getResDisc() {
-        return ResDisc;
+        return resDisc;
     }
 
     public void setResDisc(String resDisc) {
-        ResDisc = resDisc;
+        this.resDisc = resDisc;
     }
 }

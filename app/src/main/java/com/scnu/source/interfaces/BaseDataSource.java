@@ -11,6 +11,10 @@ import androidx.annotation.NonNull;
  */
 public interface BaseDataSource {
 
-    void versionCheck(CustomObserver callback);
+    /**
+     * 用户登录
+     * @param callback
+     */
+    void userLogin(String mobileNo, CustomObserver callback);
 
 }

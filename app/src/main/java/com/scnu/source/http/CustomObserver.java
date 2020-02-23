@@ -4,9 +4,9 @@ package com.scnu.source.http;
 import android.content.Context;
 import android.util.Log;
 
-import com.scnu.base.ui.BaseLoadingDialog;
+import com.scnu.base.ui.dialog.BaseLoadingDialog;
 import com.scnu.source.beans.BaseBean;
-import com.scnu.source.interfaces.BaseCallBack;
+import com.scnu.utils.ToastUtils;
 
 import androidx.fragment.app.FragmentManager;
 import io.reactivex.Observer;
@@ -24,7 +24,6 @@ public abstract class CustomObserver<T> implements Observer<T> {
     private Context mContext;
     private FragmentManager mFragmentManager;
 
-    private BaseCallBack<T> callBack;
 
     public CustomObserver(Context context, FragmentManager fragmentManager) {
         this.mFragmentManager = fragmentManager;
@@ -43,6 +42,20 @@ public abstract class CustomObserver<T> implements Observer<T> {
         }
     }
 
+    /**
+     * 请求成功
+     * @param result
+     */
+    public abstract void onSuccess(T result);
+
+    /**
+     * 请求失败
+     * @param exception
+     */
+    public void onFail(Throwable exception){
+        ToastUtils.showToast(mContext,exception.getMessage());
+    }
+
     @Override
     public void onSubscribe(Disposable d) {
             showLoadingDialog();
@@ -51,14 +64,14 @@ public abstract class CustomObserver<T> implements Observer<T> {
     @Override
     public void onNext(T value) {
         if (value.getClass().getGenericSuperclass() == ResponseBody.class){
-            callBack.onDataLoaded(value);
+            onSuccess(value);
             return;
         }
         BaseBean baseBean = (BaseBean) value;
-        if (baseBean.getResCode() == 0) {
-            callBack.onDataLoaded(value);
+        if (baseBean.getResCode().equals("0")) {
+            onSuccess(value);
         } else {
-            callBack.onDataNotAvailable(new Throwable(baseBean.getResDisc()));
+            onFail(new Throwable(baseBean.getResDisc()));
         }
     }
 
@@ -66,8 +79,7 @@ public abstract class CustomObserver<T> implements Observer<T> {
     public void onError(Throwable e) {
         onComplete();
         if (e != null && e.getMessage() != null) {
-            Log.i("onError", e.toString());
-            callBack.onDataNotAvailable(e);
+            onFail(e);
         }
     }
 

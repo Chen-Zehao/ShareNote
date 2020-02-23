@@ -1,6 +1,7 @@
 package com.scnu.custom.citypicker;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
 import com.baidu.location.BDAbstractLocationListener;

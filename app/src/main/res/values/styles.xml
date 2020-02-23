@@ -8,6 +8,12 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+
+    <style name="menu_photo_anim">
+        <item name="android:windowEnterAnimation">@anim/photo_dialog_in_anim</item>
+        <item name="android:windowExitAnimation">@anim/photo_dialog_out_anim</item>
+    </style>
+
     <!-- 取消界面转场动画使用-->
     <style name="NoAniTheme" parent="AppTheme">
         <item name="android:windowAnimationStyle">@style/Animation</item>
