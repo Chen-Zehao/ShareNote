@@ -77,6 +77,16 @@
         <item name="android:windowNoTitle">true</item>
     </style>
 
+    <style name="centerDialog" parent="android:style/Theme.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:backgroundDimAmount">0.7</item>
+        <item name="android:windowSoftInputMode">stateHidden</item>
+    </style>
+
 
     <style name="MyDialogAnimation">
         <!--进入 -->
@@ -98,6 +108,5 @@
         <item name="android:textColor">@drawable/rb_textcolor_selector</item>
         <item name="android:drawablePadding">0dp</item>
     </style>
-
 
 </resources>

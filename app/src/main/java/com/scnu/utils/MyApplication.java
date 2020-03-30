@@ -10,9 +10,23 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
+import android.util.Base64;
 import android.widget.Toast;
 
 import com.baidu.mapapi.SDKInitializer;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.DefaultRefreshFooterCreator;
+import com.scwang.smartrefresh.layout.api.DefaultRefreshHeaderCreator;
+import com.scwang.smartrefresh.layout.api.RefreshFooter;
+import com.scwang.smartrefresh.layout.api.RefreshHeader;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
+import com.scwang.smartrefresh.layout.header.ClassicsHeader;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 
 /**
@@ -29,8 +43,36 @@ public class MyApplication extends Application {
         super.onCreate();
         mInstance = this;
         mContext = getApplicationContext();
+        initSmartRefreshLayout();
         SDKInitializer.initialize(getApplicationContext());
     }
+
+    /**
+     * 初始化SmartRefreshLayout头尾布局
+     * 此处优先级低于xml或具体业务代码中的设置
+     */
+    private void initSmartRefreshLayout(){
+        //设置全局的Header构建器
+        SmartRefreshLayout.setDefaultRefreshHeaderCreator(new DefaultRefreshHeaderCreator() {
+            @Override
+            public RefreshHeader createRefreshHeader(Context context, RefreshLayout layout) {
+                //全局设置主题颜色
+//                layout.setPrimaryColorsId(R.color._15AD9C, R.color.main_states_color);
+//                return new BezierCircleHeader(context);
+                return new ClassicsHeader(context);
+            }
+        });
+
+        //设置全局的Footer构建器
+        SmartRefreshLayout.setDefaultRefreshFooterCreator(new DefaultRefreshFooterCreator() {
+            @Override
+            public RefreshFooter createRefreshFooter(Context context, RefreshLayout layout) {
+                //指定为经典Footer，默认是 BallPulseFooter
+                return new ClassicsFooter(context).setDrawableSize(20);
+            }
+        });
+    }
+
 
     //获取MyApplication单例
     public static MyApplication getInstance(){
@@ -82,6 +124,56 @@ public class MyApplication extends Application {
         return read.getString(key, "");
     }
 
+    /**
+     * 保存对象
+     * @param key
+     * @param obj
+     */
+    public static void saveObject(String key, Object obj) {
+        try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ObjectOutputStream oos = new ObjectOutputStream(baos);
+            // 将Product对象保存在ObjectOutputStream对象中
+            oos.writeObject(obj);
+            SharedPreferences preferences = mContext.getSharedPreferences(
+                    "base64", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences.edit();
+            // 将对象转换成byte数组，并将其进行base64转换。
+            String productBase64 = new String(Base64.encode(baos.toByteArray(),
+                    Base64.DEFAULT));
+            editor.putString(key, productBase64);
+            editor.commit();
+            oos.close();
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+    }
+    /**
+     * 读取对象
+     * @param key
+     * @return
+     */
+    public static Object getObject(String key) {
+        Object obj = null;
+        try {
+            SharedPreferences preferences = mContext.getSharedPreferences(
+                    "base64", Context.MODE_PRIVATE);
+            // 从源xml文件中，读取Product对象的base64格式字符串
+            String base64Product = preferences.getString(key, "");
+//			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            // 将base64格式字符串还原成byte数组
+            byte[] productBytes = Base64.decode(base64Product.getBytes(),
+                    Base64.DEFAULT);
+            ByteArrayInputStream bais = new ByteArrayInputStream(productBytes);
+            ObjectInputStream ois = new ObjectInputStream(bais);
+            // byte数组，转换成ActiveUserBean对象
+            obj = ois.readObject();
+            ois.close();
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+        return obj;
+    }
 
 
 }

@@ -3,6 +3,7 @@ package com.scnu.sharenote.detail;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.view.View;
@@ -11,11 +12,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.scnu.base.ui.activity.BaseMvpActivity;
+import com.scnu.base.ui.view.titlebar.BaseTitleBar;
 import com.scnu.custom.CircleImageView;
-import com.scnu.model.Article;
+import com.scnu.model.ArticleModel;
+import com.scnu.model.PictureModel;
 import com.scnu.sharenote.R;
 import com.scnu.sharenote.detail.adapter.HeaderImgAdapter;
 import com.scnu.utils.GlideImageLoader;
+import com.scnu.utils.ServerConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,11 +104,11 @@ public class DetailActivity extends BaseMvpActivity<IDetailView, DetailPresenter
     TextView tvCommentNum;
     @BindView(R.id.cl_bottom)
     ConstraintLayout clBottom;
-    private Article article;
+    private ArticleModel article;
 
     private HeaderImgAdapter headerImgAdapter;
 
-    private List<ImageView> imageViews;
+    private List<ImageView> imageViews = new ArrayList<>();
 
     @Override
     public int getLayoutId() {
@@ -119,9 +123,16 @@ public class DetailActivity extends BaseMvpActivity<IDetailView, DetailPresenter
 
     @Override
     public void initData() {
-        imageViews = new ArrayList<>();
-        article = (Article) getIntent().getSerializableExtra("detail");
-        presenter.initArticleDetailData();
+        Bundle bundle = getIntent().getExtras();
+        if (null != bundle) {
+            String issueId =  getIntent().getStringExtra("issueId");
+            presenter.getArticleDetail(issueId);
+        }
+    }
+
+    @Override
+    protected BaseTitleBar getTitleBar() {
+        return null;
     }
 
     @Override
@@ -129,19 +140,13 @@ public class DetailActivity extends BaseMvpActivity<IDetailView, DetailPresenter
         return new DetailPresenter();
     }
 
-    @Override
-    public void getDetailSuccess() {
-        initBannerView();
-        initInfoView();
-    }
-
     /**
      * 显示Banner图
      */
     private void initBannerView() {
-        for (String item : article.getImageList()) {
+        for (PictureModel item : article.getImageList()) {
             ImageView iv = new ImageView(mContext);
-            GlideImageLoader.getInstance().loadImage(mContext, item, iv);
+            GlideImageLoader.getInstance().loadImage(mContext, item.getImgUrl(), iv);
             imageViews.add(iv);
         }
         headerImgAdapter = new HeaderImgAdapter(imageViews, vpHeaderImg);
@@ -174,14 +179,10 @@ public class DetailActivity extends BaseMvpActivity<IDetailView, DetailPresenter
      * 显示内容信息
      */
     private void initInfoView() {
-        GlideImageLoader.getInstance().loadImage(mContext, "http://b-ssl.duitang.com/uploads/item/201607/26/20160726185736_yPmrE.thumb.224_0.jpeg", ivAvatar);
-        tvName.setText(article.getPublisher().getName());
-        String strTheme = "";
-        for(String str:article.getThemeList()){
-            strTheme += "#"+str+"#";
-        }
+        GlideImageLoader.getInstance().loadImage(mContext, ServerConfig.getInstance().getAppServerURL() + article.getUserAvatar(), ivAvatar);
+        String strTheme ="#"+article.getTheme()+"#";
         String strTitle = article.getTitle();
-        ForegroundColorSpan themeSpan = new ForegroundColorSpan(mContext.getResources().getColor(R.color.text_theme));
+        ForegroundColorSpan themeSpan = new ForegroundColorSpan(mContext.getResources().getColor(R.color.text_blue));
         ForegroundColorSpan contentSpan = new ForegroundColorSpan(mContext.getResources().getColor(R.color.text_title));
         //使用SpannableString实现字体分颜色
         SpannableString str = new SpannableString (strTheme+"  "+strTitle);
@@ -189,25 +190,13 @@ public class DetailActivity extends BaseMvpActivity<IDetailView, DetailPresenter
         str.setSpan(contentSpan,strTheme.length()+2,strTheme.length()+strTitle.length()+2,Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         str.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), strTheme.length()+2,strTheme.length()+strTitle.length()+2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         tvTitle.setText(str);
+        tvName.setText(article.getUserName());
         tvTime.setText(article.getTime());
         tvContent.setText(article.getContent());
-        tvLocation.setText(article.getLocation());
-    }
-
-
-    @Override
-    public void showLoading() {
-
-    }
-
-    @Override
-    public void hideLoading() {
-
-    }
-
-    @Override
-    public void showMessage(String message) {
-
+        tvLocation.setText(article.getLocation().getName());
+        tvLikeNum.setText(article.getLikeNum()+"");
+        tvCollectionNum.setText(article.getCollectionNum()+"");
+        tvCommentNum.setText(article.getCommentNum()+"");
     }
 
     @Override
@@ -215,5 +204,12 @@ public class DetailActivity extends BaseMvpActivity<IDetailView, DetailPresenter
         super.onCreate(savedInstanceState);
         // TODO: add setContentView(...) invocation
         ButterKnife.bind(this);
+    }
+
+    @Override
+    public void getDetailSuccess(ArticleModel article) {
+        this.article = article;
+        initBannerView();
+        initInfoView();
     }
 }

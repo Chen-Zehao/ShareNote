@@ -38,7 +38,7 @@ public class BaseEmptyView extends LinearLayout implements IEmptyView {
     public BaseEmptyView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         this.mContext = context;
-//        initView(mContext,context.obtainStyledAttributes(attrs, R.styleable.EmptyView));
+        initView(mContext,context.obtainStyledAttributes(attrs, R.styleable.EmptyView));
     }
 
     public void setEmptyRetryClickListener(EmptyRetryClickListener retryClickListener){
@@ -46,47 +46,47 @@ public class BaseEmptyView extends LinearLayout implements IEmptyView {
     }
 
     protected void initView(Context context, TypedArray typedArray) {
-//        if (null == context) {
-//            return;
-//        }
-//        View view = LayoutInflater.from(context).inflate(R.layout.view_empty_layout,null);
-//        addView(view, ViewGroup.LayoutParams.MATCH_PARENT,
-//                ViewGroup.LayoutParams.MATCH_PARENT);
-//        rootView = view.findViewById(R.id.root_view);
-//        mLinError = view.findViewById(R.id.lin_error);
-//        mLinEmpty = view.findViewById(R.id.lin_empty);
-//        mIvError = view.findViewById(R.id.iv_error_image);
-//        mTvRetry = view.findViewById(R.id.tv_retry);
-//        mIvEmpty = view.findViewById(R.id.iv_empty_image);
-//        mTvEmptyDesc = view.findViewById(R.id.tv_empty_message);
-//
-//        /** 初始状态 */
-//        mLinError.setVisibility(View.GONE);
-//        mLinEmpty.setVisibility(View.GONE);
-//
-//        /**
-//         * 重新加载点击事件回调
-//         */
-//        mTvRetry.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (null != mRetryClickListener) {
-//                    mRetryClickListener.onRetryClick();
-//                }
-//            }
-//        });
-//
-//        if (null != typedArray.getDrawable(R.styleable.EmptyView_empty_error_image)) {
-//            mIvError.setImageDrawable(typedArray.getDrawable(R.styleable.EmptyView_empty_error_image));
-//        }
-//
-//        if (!TextUtils.isEmpty(typedArray.getString(R.styleable.EmptyView_empty_desc))) {
-//            mTvEmptyDesc.setText(typedArray.getString(R.styleable.EmptyView_empty_desc));
-//        }
-//
-//        if (null != typedArray.getDrawable(R.styleable.EmptyView_empty_image)) {
-//            mIvEmpty.setImageDrawable(typedArray.getDrawable(R.styleable.EmptyView_empty_image));
-//        }
+        if (null == context) {
+            return;
+        }
+        View view = LayoutInflater.from(context).inflate(R.layout.view_empty_layout,null);
+        addView(view, ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT);
+        rootView = view.findViewById(R.id.root_view);
+        mLinError = view.findViewById(R.id.lin_error);
+        mLinEmpty = view.findViewById(R.id.lin_empty);
+        mIvError = view.findViewById(R.id.iv_error_image);
+        mTvRetry = view.findViewById(R.id.tv_retry);
+        mIvEmpty = view.findViewById(R.id.iv_empty_image);
+        mTvEmptyDesc = view.findViewById(R.id.tv_empty_message);
+
+        /** 初始状态 */
+        mLinError.setVisibility(View.GONE);
+        mLinEmpty.setVisibility(View.GONE);
+
+        /**
+         * 重新加载点击事件回调
+         */
+        mTvRetry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (null != mRetryClickListener) {
+                    mRetryClickListener.onRetryClick();
+                }
+            }
+        });
+
+        if (null != typedArray.getDrawable(R.styleable.EmptyView_empty_error_image)) {
+            mIvError.setImageDrawable(typedArray.getDrawable(R.styleable.EmptyView_empty_error_image));
+        }
+
+        if (!TextUtils.isEmpty(typedArray.getString(R.styleable.EmptyView_empty_desc))) {
+            mTvEmptyDesc.setText(typedArray.getString(R.styleable.EmptyView_empty_desc));
+        }
+
+        if (null != typedArray.getDrawable(R.styleable.EmptyView_empty_image)) {
+            mIvEmpty.setImageDrawable(typedArray.getDrawable(R.styleable.EmptyView_empty_image));
+        }
     }
 
     @Override
@@ -118,6 +118,16 @@ public class BaseEmptyView extends LinearLayout implements IEmptyView {
     @Override
     public void setEmptyDesc(int strId) {
         mTvEmptyDesc.setText(mContext.getString(strId));
+    }
+
+    @Override
+    public void setEmptyDesc(String str) {
+        mTvEmptyDesc.setText(str);
+    }
+
+    @Override
+    public void setInternetErrorDesc(String str) {
+        mTvEmptyDesc.setText(str);
     }
 
     @Override

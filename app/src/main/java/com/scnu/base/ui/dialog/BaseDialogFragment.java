@@ -20,6 +20,11 @@ import androidx.fragment.app.FragmentTransaction;
  */
 public class BaseDialogFragment extends DialogFragment{
 
+    @Override
+    public void dismiss() {
+        super.dismissAllowingStateLoss();
+    }
+
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {

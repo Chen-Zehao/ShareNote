@@ -30,6 +30,18 @@ public interface IEmptyView {
     void setEmptyDesc(int strId);
 
     /**
+     * 设置空页面文字描述
+     */
+    void setEmptyDesc(String str);
+
+
+    /**
+     * 设置网络错误页面文字描述
+     */
+    void setInternetErrorDesc(String str);
+
+
+    /**
      * EmptyView是否展示了
      * @return
      */

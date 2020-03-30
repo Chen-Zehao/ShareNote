@@ -24,9 +24,8 @@ import butterknife.Unbinder;
  * Created by ChenZehao
  * on 2019/12/5
  */
-public abstract class BaseMvpFragment<V extends BaseView, T extends BasePresenter<V>> extends Fragment {
+public abstract class BaseMvpFragment extends Fragment {
 
-    public T presenter;
     protected Context mContext;
     Unbinder unbinder;
 
@@ -55,8 +54,6 @@ public abstract class BaseMvpFragment<V extends BaseView, T extends BasePresente
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        presenter = initPresenter();
-        presenter.attach(mContext, (V) this);
         //数据处理要在attach后，否则报空
         super.onActivityCreated(savedInstanceState);
         initData();
@@ -115,10 +112,7 @@ public abstract class BaseMvpFragment<V extends BaseView, T extends BasePresente
 
     @Override
     public void onDestroy() {
-        presenter.detach();
         super.onDestroy();
     }
-
-    public abstract T initPresenter();
 
 }

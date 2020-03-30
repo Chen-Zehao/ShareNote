@@ -1,8 +1,6 @@
 package com.scnu.sharenote.main.fragment.home.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
@@ -13,9 +11,10 @@ import android.widget.TextView;
 import com.scnu.base.BaseRecycleAdapter;
 import com.scnu.base.BaseViewHolder;
 import com.scnu.custom.CircleImageView;
-import com.scnu.model.Article;
+import com.scnu.model.ArticleModel;
 import com.scnu.sharenote.R;
 import com.scnu.utils.GlideImageLoader;
+import com.scnu.utils.ServerConfig;
 
 import java.util.List;
 
@@ -23,13 +22,12 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * Created by ChenZehao
  * on 2020/1/17
  */
-public class ArticleAdapter extends BaseRecycleAdapter<Article> {
+public class ArticleAdapter extends BaseRecycleAdapter<ArticleModel> {
 
     @BindView(R.id.iv_avatar)
     CircleImageView ivAvatar;
@@ -68,31 +66,31 @@ public class ArticleAdapter extends BaseRecycleAdapter<Article> {
     @BindView(R.id.cl_location)
     ConstraintLayout clLocation;
 
-    public ArticleAdapter(Context context, List<Article> data) {
+    public ArticleAdapter(Context context, List<ArticleModel> data) {
         super(context, R.layout.home_item_article, data);
     }
 
     @Override
     protected <T> void bindView(BaseViewHolder holder, T t) {
         ButterKnife.bind(this, holder.itemView);
-        Article article = (Article) t;
-        GlideImageLoader.getInstance().loadImage(mContext, "http://b-ssl.duitang.com/uploads/item/201607/26/20160726185736_yPmrE.thumb.224_0.jpeg", ivAvatar);
-        tvName.setText(article.getPublisher().getName());
+        ArticleModel article = (ArticleModel) t;
+        GlideImageLoader.getInstance().loadImage(mContext, ServerConfig.getInstance().getAppServerURL() + article.getUserAvatar(), ivAvatar);
+        tvName.setText(article.getUserName());
         tvTime.setText(article.getTime());
-        String strTheme = "";
-        for(String str:article.getThemeList()){
-            strTheme += "#"+str+"#";
-        }
+        String strTheme = "#"+article.getTheme()+"#";
         String strTitle = article.getTitle();
-        ForegroundColorSpan themeSpan = new ForegroundColorSpan(mContext.getResources().getColor(R.color.text_theme));
+        ForegroundColorSpan themeSpan = new ForegroundColorSpan(mContext.getResources().getColor(R.color.text_blue));
         ForegroundColorSpan contentSpan = new ForegroundColorSpan(mContext.getResources().getColor(R.color.text_content));
         //使用SpannableString实现字体分颜色
         SpannableString str = new SpannableString (strTheme+"  "+strTitle);
         str.setSpan(themeSpan, 0, strTheme.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         str.setSpan(contentSpan,strTheme.length()+2,strTheme.length()+strTitle.length()+2,Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         tvContent.setText(str);
-        if(article.getImageList() != null && !article.getImageList().isEmpty())
-            GlideImageLoader.getInstance().loadImage(mContext, article.getImageList().get(0), ivCover);
+        GlideImageLoader.getInstance().loadImage(mContext, ServerConfig.getInstance().getAppServerURL() + article.getPicture(), ivCover);
+        tvLocation.setText(article.getLocation().getProvince()+"·"+article.getLocation().getCity());
+        tvLikeNum.setText(article.getLikeNum()+"");
+        tvCollectionNum.setText(article.getCollectionNum()+"");
+        tvCommentNum.setText(article.getCommentNum()+"");
     }
 
 }

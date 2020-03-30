@@ -15,7 +15,7 @@ import butterknife.BindView;
  * Created by ChenZehao
  * on 2020/2/21
  */
-public abstract class RefreshFragment<V extends BaseView, T extends BasePresenter<V>> extends BaseMvpFragment{
+public abstract class RefreshFragment extends BaseMvpFragment{
 
     @BindView(R.id.recycle_view)
     protected RecyclerView recycleView;
@@ -75,6 +75,7 @@ public abstract class RefreshFragment<V extends BaseView, T extends BasePresente
     public void initData() {
 
     }
+
     /**
      * 创建适配器
      * @return
@@ -119,19 +120,19 @@ public abstract class RefreshFragment<V extends BaseView, T extends BasePresente
         if (isSuccess) {
             if (emptyView.isVisible()) {
                 emptyView.setVisibility(View.GONE);
-//                emptyView.hideView();
             }
 
             refreshLayout.finishRefresh();
             mPageNum++;
         } else {
+            refreshLayout.finishRefresh();
             switch (type){
                 case RESULT_TYPE_ERROR:
-//                    showErrorView();
+                    showErrorView();
                     break;
 
                 case RESULT_TYPE_EMPTY:
-//                    showEmptyView();
+                    showEmptyView();
                     break;
                 default:
                     break;
@@ -143,7 +144,7 @@ public abstract class RefreshFragment<V extends BaseView, T extends BasePresente
      * 上拉加载网络请求成功后调用，mPageNum会+1
      * @return
      */
-    protected void LoadMoreDataFinish(){
+    protected void loadMoreDataFinish(){
         refreshLayout.finishLoadMore();
         mPageNum++;
     }
@@ -156,8 +157,26 @@ public abstract class RefreshFragment<V extends BaseView, T extends BasePresente
         refreshLayout.finishLoadMoreWithNoMoreData();
     }
 
-    @Override
-    public BasePresenter initPresenter() {
-        return null;
+
+    /**
+     * 展示网络错误
+     */
+    private void showErrorView(){
+        emptyView.setInternetErrorDesc("您的网络有点问题哟!");
+        emptyView.setEmptyImage(R.drawable.ic_defaultpage_img_internetnoconnect);
+        emptyView.setVisibility(View.VISIBLE);
+        emptyView.showErrorView();
+        refreshLayout.setEnableRefresh(false);
+        refreshLayout.setEnableLoadMore(false);
+    }
+
+    /**
+     * 展示空页面
+     */
+    private void showEmptyView(){
+        emptyView.setEmptyImage(R.drawable.ic_defaultpage_img_empty);
+        emptyView.setVisibility(View.VISIBLE);
+        emptyView.showEmptyView();
+        refreshLayout.setEnableLoadMore(false);
     }
 }

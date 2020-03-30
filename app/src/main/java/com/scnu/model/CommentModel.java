@@ -7,22 +7,22 @@ import java.io.Serializable;
  * Created by ChenZehao
  * on 2020/1/16
  */
-public class Comment implements Serializable {
+public class CommentModel implements Serializable {
 
-    private User user;//用户
+    private UserModel user;//用户
 
     private String comments;//评论内容
 
-    public Comment(){
-        user = new User();
+    public CommentModel(){
+        user = new UserModel();
         comments = "";
     }
 
-    public User getUser() {
+    public UserModel getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserModel user) {
         this.user = user;
     }
 

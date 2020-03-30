@@ -1,4 +1,4 @@
-package com.scnu.sharenote.main.fragment.mine.ui;
+package com.scnu.sharenote.main.fragment.mine.ui.fragment;
 
 import com.scnu.base.ui.BaseView;
 

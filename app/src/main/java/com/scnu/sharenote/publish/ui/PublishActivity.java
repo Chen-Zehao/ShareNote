@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -17,22 +18,37 @@ import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.scnu.base.ui.activity.BaseMvpActivity;
+import com.scnu.base.ui.view.titlebar.BaseTitleBar;
+import com.scnu.model.ArticleModel;
+import com.scnu.model.LocationModel;
+import com.scnu.model.Macro;
+import com.scnu.model.PictureModel;
+import com.scnu.model.ThemeModel;
+import com.scnu.model.UserModel;
 import com.scnu.sharenote.R;
 import com.scnu.sharenote.publish.adapter.FullyGridLayoutManager;
 import com.scnu.sharenote.publish.adapter.PictureAdapter;
 import com.scnu.sharenote.publish.presenter.PublishPresenter;
+import com.scnu.sharenote.publish.ui.dialog.ChooseLocationDialog;
+import com.scnu.sharenote.publish.ui.dialog.ChooseThemeDialog;
+import com.scnu.utils.DateUtils;
 import com.scnu.utils.GlideEngine;
+import com.scnu.utils.ImageUtil;
+import com.scnu.utils.MyApplication;
+import com.scnu.utils.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnTextChanged;
 
 /**
  * Created by ChenZehao
@@ -76,6 +92,10 @@ public class PublishActivity extends BaseMvpActivity<IPublishView, PublishPresen
     private int maxSelectNum = 9;
     private List<LocalMedia> selectList = new ArrayList<>();
     private PopupWindow pop;
+    private ChooseThemeDialog chooseThemeDialog;
+    private ChooseLocationDialog chooseLocationDialog;
+    private LocationModel locationModel = new LocationModel();
+    private String themeText = "";
 
     @Override
     public int getLayoutId() {
@@ -102,20 +122,13 @@ public class PublishActivity extends BaseMvpActivity<IPublishView, PublishPresen
                     LocalMedia media = selectList.get(position);
                     String pictureType = media.getMimeType();
                     int mediaType = PictureMimeType.getMimeType(pictureType);
-                    switch (mediaType) {
-                        case 1:
-                            // 预览图片 可自定长按保存路径
-                            //PictureSelector.create(NewContentActivity.this).externalPicturePreview(position, "/custom_file", selectList);
-                            PictureSelector.create(PublishActivity.this).externalPicturePreview(position, selectList, 0);
-                            break;
-                        case 2:
-                            // 预览视频
-                            PictureSelector.create(PublishActivity.this).externalPictureVideo(media.getPath());
-                            break;
-                        case 3:
-                            // 预览音频
-                            PictureSelector.create(PublishActivity.this).externalPictureAudio(media.getPath());
-                            break;
+                    if (mediaType == 1) {// 预览图片 可自定长按保存路径
+                        //PictureSelector.create(NewContentActivity.this).externalPicturePreview(position, "/custom_file", selectList);
+                        PictureSelector.create(PublishActivity.this).externalPicturePreview(position, selectList, 0);
+                    } else if (mediaType == 2) {// 预览视频
+                        PictureSelector.create(PublishActivity.this).externalPictureVideo(media.getPath());
+                    } else if (mediaType == 3) {// 预览音频
+                        PictureSelector.create(PublishActivity.this).externalPictureAudio(media.getPath());
                     }
                 }
             }
@@ -124,7 +137,6 @@ public class PublishActivity extends BaseMvpActivity<IPublishView, PublishPresen
 
     @Override
     public void initData() {
-
     }
 
     @Override
@@ -133,18 +145,8 @@ public class PublishActivity extends BaseMvpActivity<IPublishView, PublishPresen
     }
 
     @Override
-    public void showLoading() {
-
-    }
-
-    @Override
-    public void hideLoading() {
-
-    }
-
-    @Override
-    public void showMessage(String message) {
-
+    protected BaseTitleBar getTitleBar() {
+        return null;
     }
 
     @OnClick(R.id.iv_back)
@@ -152,11 +154,89 @@ public class PublishActivity extends BaseMvpActivity<IPublishView, PublishPresen
         finish();
     }
 
+    @OnClick(R.id.cl_theme)
+    void clThemeClicked(){
+        presenter.getThemeList();
+    }
+
+    @OnClick(R.id.cl_address)
+    void clAddressClicked(){
+        chooseLocationDialog = new ChooseLocationDialog(mContext);
+        chooseLocationDialog.setStyle(DialogFragment.STYLE_NORMAL,R.style.moveUpDialog);
+        chooseLocationDialog.show(getSupportFragmentManager(),null);
+        chooseLocationDialog.setOnLocationChooseListener(new ChooseLocationDialog.OnLocationChooseListener() {
+            @Override
+            public void choose(LocationModel location) {
+                tvAddress.setText(location.getName());
+                locationModel = location;
+            }
+        });
+    }
+
+    @OnClick(R.id.bt_publish)
+    void btnPublishClicked(){
+        //没有填标题或内容
+        if(TextUtils.isEmpty(etTitle.getText().toString()) || TextUtils.isEmpty(etContent.getText().toString())){
+            ToastUtils.showToast(mContext,"请填写标题和内容");
+            return;
+        }
+        String title = etTitle.getText().toString();
+        String content = etContent.getText().toString();
+        List<PictureModel> picList = new ArrayList<>();
+        for(LocalMedia localMedia : selectList){
+            String path = localMedia.getCompressPath();
+            String fileName = localMedia.getFileName();
+            String base64Path = ImageUtil.bitmapToString(path);
+            PictureModel picture = new PictureModel();
+            picture.setPictureBase64(base64Path);
+            picture.setFileName(fileName);
+            picList.add(picture);
+        }
+        ArticleModel article = new ArticleModel();
+        article.setTitle(title);
+        article.setContent(content);
+        article.setImageList(picList);
+        article.setLocation(locationModel);
+        UserModel user = (UserModel) MyApplication.getObject(Macro.KEY_USER);
+        article.setUserId(user.getUserId());
+        article.setTheme(themeText);
+        article.setTime(DateUtils.getCurTime());
+        presenter.publish(article);
+    }
+
+    @OnTextChanged(R.id.et_title)
+    void onTitleTextChanged(CharSequence text){
+        if (TextUtils.isEmpty(text.toString())){
+            btPublish.setBackground(mContext.getResources().getDrawable(R.drawable.publish_bg_btn_unable));
+        }else{
+            if(TextUtils.isEmpty(etContent.getText().toString())){
+                btPublish.setBackground(mContext.getResources().getDrawable(R.drawable.publish_bg_btn_unable));
+            }else {
+                btPublish.setBackground(mContext.getResources().getDrawable(R.drawable.publish_bg_btn_able));
+            }
+        }
+    }
+
+    @OnTextChanged(R.id.et_content)
+    void onContentTextChanged(CharSequence text){
+        if (TextUtils.isEmpty(text.toString())){
+            btPublish.setBackground(mContext.getResources().getDrawable(R.drawable.publish_bg_btn_unable));
+        }else{
+            if(TextUtils.isEmpty(etTitle.getText().toString())){
+                btPublish.setBackground(mContext.getResources().getDrawable(R.drawable.publish_bg_btn_unable));
+            }else {
+                btPublish.setBackground(mContext.getResources().getDrawable(R.drawable.publish_bg_btn_able));
+            }
+        }
+    }
+
+    /**
+     * 选择图片方式
+     */
     private void showPop() {
         View bottomView = View.inflate(PublishActivity.this, R.layout.layout_bottom_dialog, null);
         TextView mAlbum = (TextView) bottomView.findViewById(R.id.tv_album);
         TextView mCamera = (TextView) bottomView.findViewById(R.id.tv_camera);
-        TextView mCancel = (TextView) bottomView.findViewById(R.id.tv_cancel);
 
         pop = new PopupWindow(bottomView, -1, -2);
         pop.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -197,11 +277,8 @@ public class PublishActivity extends BaseMvpActivity<IPublishView, PublishPresen
                         //拍照
                         PictureSelector.create(PublishActivity.this)
                                 .openCamera(PictureMimeType.ofImage())
+                                .compress(true)
                                 .forResult(PictureConfig.CHOOSE_REQUEST);
-                        break;
-                    case R.id.tv_cancel:
-                        //取消
-                        //closePopupWindow();
                         break;
                 }
                 closePopupWindow();
@@ -210,7 +287,6 @@ public class PublishActivity extends BaseMvpActivity<IPublishView, PublishPresen
 
         mAlbum.setOnClickListener(clickListener);
         mCamera.setOnClickListener(clickListener);
-        mCancel.setOnClickListener(clickListener);
     }
 
     public void closePopupWindow() {
@@ -248,5 +324,25 @@ public class PublishActivity extends BaseMvpActivity<IPublishView, PublishPresen
         super.onCreate(savedInstanceState);
         // TODO: add setContentView(...) invocation
         ButterKnife.bind(this);
+    }
+
+    @Override
+    public void getThemeListSuccess(List<ThemeModel> themeModelList) {
+        chooseThemeDialog = new ChooseThemeDialog(mContext,themeModelList);
+        chooseThemeDialog.setStyle(DialogFragment.STYLE_NORMAL,R.style.centerDialog);
+        chooseThemeDialog.show(getSupportFragmentManager(),null);
+        chooseThemeDialog.setThemeChooseListener(new ChooseThemeDialog.ThemeChooseListener() {
+            @Override
+            public void themeChosen(String theme) {
+                tvTheme.setText(theme);
+                themeText = theme;
+            }
+        });
+    }
+
+    @Override
+    public void publishSuccess() {
+        ToastUtils.showToast(mContext,"文章发布成功");
+        finish();
     }
 }

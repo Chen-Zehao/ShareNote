@@ -7,6 +7,8 @@ import com.scnu.sharenote.main.fragment.home.fragment.follow.ui.FollowFragment;
 import com.scnu.sharenote.main.fragment.home.fragment.local.ui.LocalFragment;
 import com.scnu.sharenote.main.fragment.home.fragment.recommend.ui.RecommendFragment;
 import com.scnu.sharenote.main.fragment.home.presenter.HomePresenter;
+import com.scnu.sharenote.main.fragment.home.ui.view.LazyLoadingPagerAdapter;
+import com.scnu.utils.LogUtils;
 
 import java.util.ArrayList;
 
@@ -20,7 +22,7 @@ import butterknife.BindView;
  * Created by ChenZehao
  * on 2019/12/10
  */
-public class HomeFragment extends BaseMvpFragment<IHomeView, HomePresenter> implements IHomeView {
+public class HomeFragment extends BaseMvpFragment implements IHomeView {
 
 
     @BindView(R.id.tl_header)
@@ -32,8 +34,13 @@ public class HomeFragment extends BaseMvpFragment<IHomeView, HomePresenter> impl
     @BindView(R.id.vp_content)
     ViewPager vpContent;
 
+    private HomePresenter homePresenter;
+
     private ArrayList<Fragment> mFragments;
 
+    private LazyLoadingPagerAdapter pagerAdapter;
+
+    private String[] titles = new String[]{"关注", "推荐", "同城"};
 
     @Override
     protected int getLayoutId() {
@@ -42,12 +49,16 @@ public class HomeFragment extends BaseMvpFragment<IHomeView, HomePresenter> impl
 
     @Override
     public void initView() {
+        homePresenter = new HomePresenter(mContext,this);
         mFragments = new ArrayList<>();
         mFragments.add(new FollowFragment());
         mFragments.add(new RecommendFragment());
         mFragments.add(new LocalFragment());
+        pagerAdapter = new LazyLoadingPagerAdapter(getChildFragmentManager(),mFragments);
+        vpContent.setOffscreenPageLimit(mFragments.size());
+        vpContent.setAdapter(pagerAdapter);
         //关联TabLayout与ViewPager
-        tlHeader.setViewPager(vpContent, new String[]{"关注", "推荐", "同城"},getActivity(),mFragments);
+        tlHeader.setViewPager(vpContent, titles);
         //初始显示推荐页面
         tlHeader.setCurrentTab(1);
     }
@@ -57,29 +68,11 @@ public class HomeFragment extends BaseMvpFragment<IHomeView, HomePresenter> impl
     }
 
 
-    @Override
-    public HomePresenter initPresenter() {
-        return new HomePresenter();
-    }
-
-    @Override
-    public void showLoading() {
-
-    }
-
-    @Override
-    public void hideLoading() {
-
-    }
-
-    @Override
-    public void showMessage(String message) {
-
-    }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        homePresenter.detach();
     }
 
 }

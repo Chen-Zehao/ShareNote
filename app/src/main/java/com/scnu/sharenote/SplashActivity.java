@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.WindowManager;
 
-import com.jaeger.library.StatusBarUtil;
+import com.scnu.model.Macro;
 import com.scnu.sharenote.login.ui.LoginActivity;
 import com.scnu.sharenote.main.ui.MainActivity;
 import com.scnu.utils.MyApplication;
@@ -25,12 +25,11 @@ public class SplashActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        StatusBarUtil.setTransparent(this);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash);
         ButterKnife.bind(this);
         mContext = this;
-        isLogin = MyApplication.getParaValue("isLogin");
+        isLogin = MyApplication.getParaValue(Macro.KEY_IS_LOGIN);
         //2秒延时关闭
         TimerTask task = new TimerTask() {
             @Override

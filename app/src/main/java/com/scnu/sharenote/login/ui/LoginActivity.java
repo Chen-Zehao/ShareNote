@@ -12,8 +12,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.jaeger.library.StatusBarUtil;
 import com.scnu.base.ui.activity.BaseMvpActivity;
+import com.scnu.base.ui.view.titlebar.BaseTitleBar;
+import com.scnu.model.Macro;
 import com.scnu.sharenote.R;
 import com.scnu.sharenote.login.presenter.LoginPresenter;
 import com.scnu.sharenote.main.ui.MainActivity;
@@ -52,20 +53,15 @@ public class LoginActivity extends BaseMvpActivity<ILoginView, LoginPresenter> i
         return R.layout.activity_login;
     }
 
-    /**
-     * StatusBarUtil设置
-     * StatusBarUtil.setColor(Activity activity, int color) 设置颜色
-     * StatusBarUtil.setTranslucent(Activity activity, int statusBarAlpha) 设置透明度
-     * StatusBarUtil.setTransparent(Activity activity) 设置全透明
-     * StatusBarUtil.setColorForDrawerLayout(Activity activity, DrawerLayout drawerLayout, int color) 给抽屉设置颜色
-     * StatusBarUtil.setTranslucentForImageView(Activity activity, int statusBarAlpha, View needOffsetView) 给使用ImageView作为头部的界面设置半透明
-     */
-
     @Override
     public void initView() {
-        StatusBarUtil.setLightMode(this);
         btLogin.setEnabled(false);
         initListener();
+    }
+
+    @Override
+    protected BaseTitleBar getTitleBar() {
+        return null;
     }
 
     private void initListener() {
@@ -142,7 +138,6 @@ public class LoginActivity extends BaseMvpActivity<ILoginView, LoginPresenter> i
             }
         } else if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {//提交验证码
             if (result == SMSSDK.RESULT_COMPLETE) {//验证成功
-                MyApplication.setParaValue("isLogin","Y");
                 presenter.userLogin(etMobile.getText().toString());
             } else {
                 Toast.makeText(this, R.string.smssdk_virificaition_code_wrong, Toast.LENGTH_SHORT).show();
@@ -221,20 +216,6 @@ public class LoginActivity extends BaseMvpActivity<ILoginView, LoginPresenter> i
 
 
     @Override
-    public void showLoading() {
-
-    }
-
-    @Override
-    public void hideLoading() {
-
-    }
-
-    @Override
-    public void showMessage(String message) {
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // TODO: add setContentView(...) invocation
@@ -267,6 +248,7 @@ public class LoginActivity extends BaseMvpActivity<ILoginView, LoginPresenter> i
     @Override
     public void userLoginSuccess() {
         ToastUtils.showToast(mContext,"登录成功");
+        MyApplication.setParaValue(Macro.KEY_IS_LOGIN,"Y");
         startActivity(new Intent(mContext, MainActivity.class));
         finish();
     }

@@ -35,16 +35,6 @@
             android:text="拍照"
             android:textSize="@dimen/sp_16"/>
 
-        <TextView
-            android:id="@+id/tv_cancel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_10"
-            android:background="@drawable/shape_cancel"
-            android:gravity="center"
-            android:padding="@dimen/dp_15"
-            android:text="取消"
-            android:textSize="@dimen/sp_16"/>
 
     </LinearLayout>
 

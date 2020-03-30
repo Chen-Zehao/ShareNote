@@ -11,14 +11,14 @@ import android.widget.Toast;
 import com.alibaba.fastjson.JSON;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
-import com.scnu.base.ui.fragment.BaseMvpFragment;
 import com.scnu.base.ui.fragment.RefreshFragment;
 import com.scnu.base.ui.fragment.RefreshListener;
 import com.scnu.custom.citypicker.CityLocationListener;
 import com.scnu.custom.citypicker.CityPicker;
 import com.scnu.eventbusmodel.LocationInfoEvent;
-import com.scnu.model.Article;
-import com.scnu.model.User;
+import com.scnu.model.ArticleModel;
+import com.scnu.model.PictureModel;
+import com.scnu.model.UserModel;
 import com.scnu.sharenote.R;
 import com.scnu.sharenote.main.fragment.home.adapter.ArticleAdapter;
 import com.scnu.sharenote.main.fragment.home.fragment.local.presenter.LocalPresenter;
@@ -39,7 +39,6 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import butterknife.BindView;
 
 import static com.scnu.model.Macro.REQUEST_PERMISSION_ACCESS_FINE_LOCATION;
 
@@ -47,9 +46,11 @@ import static com.scnu.model.Macro.REQUEST_PERMISSION_ACCESS_FINE_LOCATION;
  * Created by ChenZehao
  * on 2020/1/15
  */
-public class LocalFragment extends RefreshFragment<ILocalView, LocalPresenter> implements ILocalView,RefreshListener {
+public class LocalFragment extends RefreshFragment implements ILocalView,RefreshListener {
 
-    private List<Article> articleList;
+    private LocalPresenter localPresenter;
+
+    private List<ArticleModel> articleList;
     private ArticleAdapter articleAdapter;
 
     public LocationClient mLocationClient = null;
@@ -61,9 +62,17 @@ public class LocalFragment extends RefreshFragment<ILocalView, LocalPresenter> i
     }
 
     @Override
+    public void initView() {
+        super.initView();
+        localPresenter = new LocalPresenter(mContext,this);
+    }
+
+    @Override
     public void initData() {
         //注册事件
-        EventBus.getDefault().register(this);
+        if(!EventBus.getDefault().isRegistered(this)){
+            EventBus.getDefault().register(this);
+        }
         cityLocationListener = new CityLocationListener();
         //声明LocationClient类
         mLocationClient = new LocationClient(mContext);
@@ -92,11 +101,6 @@ public class LocalFragment extends RefreshFragment<ILocalView, LocalPresenter> i
     @Override
     public RefreshListener getRefreshListener() {
         return this;
-    }
-
-    @Override
-    public LocalPresenter initPresenter() {
-        return new LocalPresenter();
     }
 
 
@@ -144,23 +148,6 @@ public class LocalFragment extends RefreshFragment<ILocalView, LocalPresenter> i
         });
     }
 
-
-
-    @Override
-    public void showLoading() {
-
-    }
-
-    @Override
-    public void hideLoading() {
-
-    }
-
-    @Override
-    public void showMessage(String message) {
-
-    }
-
     /**
      * 定位完成之后更新数据
      * @param event
@@ -179,27 +166,6 @@ public class LocalFragment extends RefreshFragment<ILocalView, LocalPresenter> i
         switch (requestCode) {
             case REQUEST_PERMISSION_ACCESS_FINE_LOCATION:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    for (int i = 0; i < 10; i++) {
-                        Article article = new Article();
-                        User user = new User();
-                        user.setAvatarUrl("http://b-ssl.duitang.com/uploads/item/201607/26/20160726185736_yPmrE.thumb.224_0.jpeg");
-                        user.setName("哈哈哈");
-                        article.setPublisher(user);
-                        article.setTime("2020-1-1 01:12:34");
-                        article.setTitle("哈哈哈");
-                        article.setCollectionNum(999);
-                        article.setLikeNum(999);
-                        article.setCommentNum(999);
-                        List<String> themeList = new ArrayList<>();
-                        themeList.add("旅游");
-                        article.setThemeList(themeList);
-                        article.setContent("超级漂亮");
-                        List<String> imageList = new ArrayList<>();
-                        imageList.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1579262564179&di=e51e90db3d4247d0a626e3d1b446e8fb&imgtype=0&src=http%3A%2F%2Fimg.mp.itc.cn%2Fupload%2F20170607%2F17abce67996540b38f7795355dfd0d3e_th.jpg");
-                        article.setImageList(imageList);
-                        article.setLocation("广东·广州");
-                        articleList.add(article);
-                    }
                     articleAdapter.notifyDataSetChanged();
                 } else {
                     Toast.makeText(getContext(), "位置权限被拒绝", Toast.LENGTH_SHORT).show();
@@ -210,22 +176,24 @@ public class LocalFragment extends RefreshFragment<ILocalView, LocalPresenter> i
     }
 
     @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser) {
-            //Fragment要用本身申请权限，不可用ActivityCompat.requestPermissions
-            if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                //没有权限需要弹框
-                showPermissionRequireDialog();
-            }
+    public void onResume() {
+        super.onResume();
+        //Fragment要用本身申请权限，不可用ActivityCompat.requestPermissions
+        if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            //没有权限需要弹框
+            showPermissionRequireDialog();
         }
     }
 
     @Override
     public void onDestroy() {
-        EventBus.getDefault().unregister(this);
+        //注册事件
+        if(EventBus.getDefault().isRegistered(this)){
+            EventBus.getDefault().unregister(this);
+        }
         mLocationClient.unRegisterLocationListener(cityLocationListener);
         super.onDestroy();
+        localPresenter.detach();
     }
 
     @Override

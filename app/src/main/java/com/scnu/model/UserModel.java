@@ -1,5 +1,7 @@
 package com.scnu.model;
 
+import com.scnu.enums.Enums;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +11,7 @@ import java.util.List;
  * Created by ChenZehao
  * on 2020/1/16
  */
-public class User implements Serializable {
+public class UserModel implements Serializable {
 
     private String mobileNo;//手机号
 
@@ -27,10 +29,10 @@ public class User implements Serializable {
 
     private List<String> attentionUserList;//关注用户id列表
 
-    public User(){
+    public UserModel(){
         mobileNo = "";
         name = "";
-        sex = "";
+        sex = Enums.getUNKNOWN();
         userId = "";
         avatarUrl = "";
         attentionUserList = new ArrayList<>();

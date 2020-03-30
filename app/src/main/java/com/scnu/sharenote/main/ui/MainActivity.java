@@ -8,14 +8,20 @@ import android.widget.RadioGroup;
 
 import com.scnu.base.ui.activity.BaseMvpActivity;
 import com.scnu.base.ui.fragment.BaseMvpFragment;
+import com.scnu.base.ui.view.titlebar.BaseTitleBar;
+import com.scnu.model.Macro;
+import com.scnu.model.UserModel;
 import com.scnu.sharenote.R;
 import com.scnu.sharenote.main.presenter.MainPresenter;
 import com.scnu.sharenote.main.fragment.home.ui.HomeFragment;
-import com.scnu.sharenote.main.fragment.mine.ui.MineFragment;
+import com.scnu.sharenote.main.fragment.mine.ui.fragment.MineFragment;
 import com.scnu.sharenote.publish.ui.PublishActivity;
+import com.scnu.utils.MyApplication;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.crypto.Mac;
 
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.fragment.app.FragmentTransaction;
@@ -67,7 +73,7 @@ public class MainActivity extends BaseMvpActivity<IMainView, MainPresenter> impl
 
     @Override
     public void initData() {
-
+        UserModel user = (UserModel)MyApplication.getObject(Macro.KEY_USER);
     }
 
     @Override
@@ -75,6 +81,10 @@ public class MainActivity extends BaseMvpActivity<IMainView, MainPresenter> impl
         return new MainPresenter();
     }
 
+    @Override
+    protected BaseTitleBar getTitleBar() {
+        return null;
+    }
 
     /**
      * listener
@@ -148,22 +158,6 @@ public class MainActivity extends BaseMvpActivity<IMainView, MainPresenter> impl
     @OnClick(R.id.iv_new_content)
     void btnPublishClicked(){
         startActivity(new Intent(mContext, PublishActivity.class));
-    }
-
-
-    @Override
-    public void showLoading() {
-
-    }
-
-    @Override
-    public void hideLoading() {
-
-    }
-
-    @Override
-    public void showMessage(String message) {
-
     }
 
 }

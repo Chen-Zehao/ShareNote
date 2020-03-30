@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="TitleBarView">
+        <attr name="title_text" format="string"/>
+        <attr name="title_text_color" format="color"/>
+    </declare-styleable>
+
+    <declare-styleable name="EmptyView">
+        <attr name="empty_desc" format="string"/>
+        <attr name="empty_image" format="reference"/>
+        <attr name="empty_error_image" format="reference"/>
+    </declare-styleable>
+
+</resources>

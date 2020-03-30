@@ -24,10 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.scnu.eventbusmodel.RequirePermissionEvent;
-import com.scnu.model.Article;
-import com.scnu.model.User;
 import com.scnu.sharenote.R;
-import com.scnu.sharenote.main.fragment.home.adapter.ArticleAdapter;
 import com.zaaach.citypicker.adapter.InnerListener;
 import com.zaaach.citypicker.adapter.OnPickListener;
 import com.zaaach.citypicker.adapter.decoration.DividerItemDecoration;

@@ -37,7 +37,7 @@ public abstract class CustomObserver<T> implements Observer<T> {
     }
 
     private void dismissDialog(){
-        if (null != mLoadingDialog && mLoadingDialog.isVisible()) {
+        if (null != mLoadingDialog) {
             mLoadingDialog.dismissAllowingStateLoss();
         }
     }
