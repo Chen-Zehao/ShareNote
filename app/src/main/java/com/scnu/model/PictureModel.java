@@ -13,9 +13,6 @@ public class PictureModel implements Serializable {
     private String pictureBase64;
     //文件名
     private String fileName;
-    //url
-    @JSONField(serialize = false)
-    private String imgUrl;
 
     public PictureModel(){
         pictureBase64 = "";
@@ -38,11 +35,4 @@ public class PictureModel implements Serializable {
         this.fileName = fileName;
     }
 
-    public String getImgUrl() {
-        return imgUrl;
-    }
-
-    public void setImgUrl(String imgUrl) {
-        this.imgUrl = imgUrl;
-    }
 }

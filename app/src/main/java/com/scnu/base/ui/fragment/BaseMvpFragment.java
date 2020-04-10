@@ -59,18 +59,18 @@ public abstract class BaseMvpFragment extends Fragment {
         initData();
     }
 
-
-    /**
-     * 初始化数据
-     */
-    protected abstract void initData();
-
     /**
      * 初始化view
      * @return
      */
     protected abstract void initView();
 
+
+
+    /**
+     * 初始化数据
+     */
+    protected abstract void initData();
 
 
     /**

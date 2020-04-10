@@ -3,10 +3,14 @@ package com.scnu.sharenote.main.fragment.home.fragment.recommend.presenter;
 import android.content.Context;
 
 import com.scnu.base.BasePresenter;
+import com.scnu.enums.QueryTypeEnum;
+import com.scnu.model.Macro;
+import com.scnu.model.UserModel;
 import com.scnu.sharenote.main.fragment.home.fragment.recommend.ui.IRecommendView;
 import com.scnu.source.beans.ArticleListResBean;
 import com.scnu.source.http.CustomObserver;
 import com.scnu.source.http.OnlineDataSource;
+import com.scnu.utils.MyApplication;
 import com.scnu.utils.ToastUtils;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,7 +30,8 @@ public class RecommendPresenter extends BasePresenter<IRecommendView> {
      * @param pageNum
      */
     public void queryArticleList(int pageNum){
-        OnlineDataSource.getInstance().queryArticleList(pageNum, new CustomObserver<ArticleListResBean>(getContext(),((AppCompatActivity)getContext()).getSupportFragmentManager()) {
+        UserModel userModel = (UserModel) MyApplication.getObject(Macro.KEY_USER);
+        OnlineDataSource.getInstance().queryArticleList(QueryTypeEnum.getTypeAll(), "0", userModel.getUserId(), "", 0, 0, "", "", userModel.getUserId(), pageNum, new CustomObserver<ArticleListResBean>(getContext(),((AppCompatActivity)getContext()).getSupportFragmentManager()) {
             @Override
             public void onSuccess(ArticleListResBean result) {
                 if(null != result){
@@ -56,7 +61,8 @@ public class RecommendPresenter extends BasePresenter<IRecommendView> {
      * @param pageNum
      */
     public void loadMoreArticle(int pageNum){
-        OnlineDataSource.getInstance().queryArticleList(pageNum, new CustomObserver<ArticleListResBean>(getContext(),((AppCompatActivity)getContext()).getSupportFragmentManager()) {
+        UserModel userModel = (UserModel) MyApplication.getObject(Macro.KEY_USER);
+        OnlineDataSource.getInstance().queryArticleList(QueryTypeEnum.getTypeAll(), "0", userModel.getUserId(), "", 0, 0, "", "", userModel.getUserId(), pageNum, new CustomObserver<ArticleListResBean>(getContext(),((AppCompatActivity)getContext()).getSupportFragmentManager()) {
             @Override
             public void onSuccess(ArticleListResBean result) {
                 if(null != result){

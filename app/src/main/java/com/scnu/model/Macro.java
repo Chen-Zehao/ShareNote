@@ -12,4 +12,6 @@ public class Macro {
 
     public static final String KEY_IS_LOGIN = "isLogin";
     public static final String KEY_USER = "user";
+    public static final String KEY_CITY = "city";
+    public static final String KEY_USER_ID = "user_id";
 }

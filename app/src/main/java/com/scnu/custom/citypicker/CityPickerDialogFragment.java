@@ -202,8 +202,9 @@ public class CityPickerDialogFragment extends DialogFragment implements TextWatc
             if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 //没有权限则为fail
                 locateState = LocateState.FAILURE;
-            }else
+            }else{
                 locateState = LocateState.LOCATING;
+            }
         }else{
             locateState = LocateState.SUCCESS;
         }

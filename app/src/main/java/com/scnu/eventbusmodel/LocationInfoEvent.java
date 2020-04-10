@@ -10,9 +10,15 @@ public class LocationInfoEvent {
 
     private String province;
 
-    public LocationInfoEvent(String city,String province){
+    private double latitude;
+
+    private double longtitude;
+
+    public LocationInfoEvent(String city,String province,double latitude,double longtitude){
         this.city = city;
         this.province = province;
+        this.latitude = latitude;
+        this.longtitude = longtitude;
     }
 
     public String getCity() {
@@ -29,5 +35,21 @@ public class LocationInfoEvent {
 
     public void setProvince(String province) {
         this.province = province;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongtitude() {
+        return longtitude;
+    }
+
+    public void setLongtitude(double longtitude) {
+        this.longtitude = longtitude;
     }
 }

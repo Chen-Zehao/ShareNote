@@ -13,6 +13,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.scnu.eventbusmodel.RequirePermissionEvent;
+import com.scnu.utils.LogUtils;
 import com.zaaach.citypicker.R;
 import com.zaaach.citypicker.adapter.GridListAdapter;
 import com.zaaach.citypicker.adapter.InnerListener;
@@ -190,10 +191,9 @@ public class CityListAdapter extends RecyclerView.Adapter<CityListAdapter.BaseVi
                     }
                 }
             });
-            //第一次弹窗，如果未定位则自动定位
-            if (autoLocate && locateState == LocateState.LOCATING && mInnerListener != null){
+            //初次进入时自动定位
+            if (locateState == LocateState.LOCATING && mInnerListener != null){
                 mInnerListener.locate();
-                autoLocate = false;
             }
         }
         //热门城市
@@ -205,6 +205,7 @@ public class CityListAdapter extends RecyclerView.Adapter<CityListAdapter.BaseVi
             mAdapter.setInnerListener(mInnerListener);
             ((HotViewHolder) holder).mRecyclerView.setAdapter(mAdapter);
         }
+
     }
 
     public void reGetLocation(){

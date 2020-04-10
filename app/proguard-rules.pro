@@ -88,3 +88,80 @@
 -keepclassmembers class * extends org.greenrobot.eventbus.util.ThrowableFailureEvent {
     <init>(java.lang.Throwable);
 }
+
+#fastjson
+-dontwarn com.alibaba.fastjson.**
+-keep public class com.alibaba.fastjson.**{*;}
+
+#glide https://github.com/bumptech/glide
+-keep public class * implements com.bumptech.glide.module.GlideModule
+-keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
+  **[] $VALUES;
+  public *;
+}
+
+-dontwarn javax.annotation.**
+-dontwarn javax.inject.**
+
+#百度sdk
+-keep class com.baidu.** {*;}
+-keep class vi.com.** {*;}
+-dontwarn com.baidu.**
+
+
+#OkHttp3
+-keepattributes Signature
+-keepattributes *Annotation*
+-keep class okhttp3.** { *; }
+-keep interface okhttp3.** { *; }
+-dontwarn okhttp3.**
+-dontwarn okio.*
+-dontwarn okhttp3.**
+-dontwarn javax.annotation.**
+
+#Retrofit
+-dontwarn okio.**
+-dontwarn javax.annotation.**
+-dontwarn sun.misc.**
+-dontwarn sorg.codehaus.mojo.animal_sniffer.**
+-dontwarn org.codehaus.**
+-dontwarn java.nio.**
+-dontwarn java.lang.invoke.**
+
+#RxJava
+-dontwarn rx.**
+-keep class rx.** { *; }
+-dontwarn io.reactivex.**
+-keep class io.reactivex.** { *; }
+
+#Gson
+-dontwarn com.google.gson.**
+-keep class com.google.gson.** { *; }
+
+#静态内部类
+-keep class com.AnywayAds.**{*;}
+
+#PictureSelector 2.0
+-keep class com.luck.picture.lib.** { *; }
+
+#Ucrop
+-dontwarn com.yalantis.ucrop**
+-keep class com.yalantis.ucrop** { *; }
+-keep interface com.yalantis.ucrop** { *; }
+
+#Okio
+-dontwarn org.codehaus.mojo.animal_sniffer.*
+
+-keep class com.scnu.model.**{*;}
+
+#cityPicker
+-keep class com.lljjcoder.**{
+	*;
+}
+
+-dontwarn demo.**
+-keep class demo.**{*;}
+-dontwarn net.sourceforge.pinyin4j.**
+-keep class net.sourceforge.pinyin4j.**{*;}
+-keep class net.sourceforge.pinyin4j.format.**{*;}
+-keep class net.sourceforge.pinyin4j.format.exception.**{*;}

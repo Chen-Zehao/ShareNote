@@ -9,7 +9,7 @@ import androidx.annotation.StringDef;
  * Created by ChenZehao
  * on 2020/2/27
  */
-public class Enums {
+public class SexEnum {
 
     private static final String UNKNOWN = "0";//位置
     private static final String FEMALE = "1";//女

@@ -1,5 +1,7 @@
 package com.scnu.sharenote.main.fragment.home.ui;
 
+import android.content.Intent;
+
 import com.flyco.tablayout.SlidingTabLayout;
 import com.scnu.base.ui.fragment.BaseMvpFragment;
 import com.scnu.sharenote.R;
@@ -8,7 +10,7 @@ import com.scnu.sharenote.main.fragment.home.fragment.local.ui.LocalFragment;
 import com.scnu.sharenote.main.fragment.home.fragment.recommend.ui.RecommendFragment;
 import com.scnu.sharenote.main.fragment.home.presenter.HomePresenter;
 import com.scnu.sharenote.main.fragment.home.ui.view.LazyLoadingPagerAdapter;
-import com.scnu.utils.LogUtils;
+import com.scnu.sharenote.search.ui.SearchActivity;
 
 import java.util.ArrayList;
 
@@ -17,6 +19,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * Created by ChenZehao
@@ -42,6 +45,8 @@ public class HomeFragment extends BaseMvpFragment implements IHomeView {
 
     private String[] titles = new String[]{"关注", "推荐", "同城"};
 
+    public HomeFragment(){}
+
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_home;
@@ -65,6 +70,11 @@ public class HomeFragment extends BaseMvpFragment implements IHomeView {
 
     @Override
     public void initData() {
+    }
+
+    @OnClick(R.id.iv_search)
+    void ivSearchClicked(){
+        startActivity(new Intent(mContext, SearchActivity.class));
     }
 
 

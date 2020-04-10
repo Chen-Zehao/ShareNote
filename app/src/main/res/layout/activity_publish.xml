@@ -59,6 +59,7 @@
                 android:layout_marginRight="@dimen/dp_16"
                 android:background="@null"
                 android:textSize="@dimen/sp_16"
+                android:textCursorDrawable="@drawable/shape_edittext_cursor"
                 android:textColor="@color/text_black"
                 android:maxLength="20"
                 android:hint="填写标题会有更多人注意哟！"
@@ -78,6 +79,7 @@
                 android:textColor="@color/text_black"
                 android:hint="编辑正文"
                 android:gravity="top"
+                android:textCursorDrawable="@drawable/shape_edittext_cursor"
                 android:inputType="textMultiLine"
                 android:textColorHint="@color/text_less_gray"
                 app:layout_constraintTop_toBottomOf="@id/et_title"
@@ -183,6 +185,59 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/iv_address_pulldown"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_price"
+                android:layout_width="@dimen/dp_0"
+                android:layout_height="@dimen/dp_48"
+                android:layout_marginLeft="@dimen/dp_16"
+                android:layout_marginRight="@dimen/dp_16"
+                app:layout_constraintTop_toBottomOf="@id/cl_address"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_price"
+                    android:layout_width="@dimen/dp_24"
+                    android:layout_height="@dimen/dp_24"
+                    app:srcCompat="@mipmap/publish_ic_price_unable"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
+                <TextView
+                    android:id="@+id/tv_price_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/sp_14"
+                    android:textColor="@color/caption_text_color"
+                    android:text="人均价格"
+                    android:layout_marginLeft="@dimen/dp_16"
+                    app:layout_constraintStart_toEndOf="@id/iv_price"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_price_pulldown"
+                    android:layout_width="@dimen/dp_16"
+                    android:layout_height="@dimen/dp_16"
+                    android:visibility="gone"
+                    app:srcCompat="@drawable/ic_common_pulldown"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+                <TextView
+                    android:id="@+id/tv_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:hint="请选择"
+                    android:textColor="@color/text_blue"
+                    android:textColorHint="@color/text_less_gray"
+                    android:textSize="@dimen/sp_14"
+                    android:layout_marginRight="@dimen/dp_16"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/iv_price_pulldown"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

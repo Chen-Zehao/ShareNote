@@ -8,6 +8,7 @@
         android:id="@+id/cl_header"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_40"
+        android:background="@color/white"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -31,7 +32,7 @@
                 android:id="@+id/tv_location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="广州"
+                android:text="未知"
                 android:layout_marginLeft="4dp"
                 android:textSize="@dimen/sp_12"
                 android:textColor="@color/caption_text_color"
@@ -167,5 +168,100 @@
         </FrameLayout>
 
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+    <View
+        android:id="@+id/v_mask"
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="@dimen/dp_0"
+        android:background="#99000000"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="@id/refreshLayout"
+        app:layout_constraintBottom_toBottomOf="@id/refreshLayout"
+        app:layout_constraintStart_toStartOf="@id/refreshLayout"
+        app:layout_constraintEnd_toEndOf="@id/refreshLayout"/>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_type_view"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/dp_16"
+        android:paddingBottom="@dimen/dp_16"
+        android:background="@drawable/shape_drop_down_view"
+        app:layout_constraintTop_toBottomOf="@id/cl_header">
+
+        <com.donkingliang.labels.LabelsView
+            android:id="@+id/lv_type"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_8"
+            android:layout_marginRight="@dimen/dp_8"
+            app:labelTextWidth="@dimen/dp_100"
+            app:labelTextHeight="@dimen/dp_32"
+            app:labelBackground="@drawable/label_bg"
+            app:labelTextColor="@drawable/label_text_color"
+            app:selectType="SINGLE_IRREVOCABLY"
+            app:labelTextSize="@dimen/sp_12"
+            app:lineMargin="@dimen/dp_16"
+            app:wordMargin="@dimen/dp_16"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_sort_view"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/dp_16"
+        android:paddingBottom="@dimen/dp_16"
+        android:background="@drawable/shape_drop_down_view"
+        app:layout_constraintTop_toBottomOf="@id/cl_header">
+
+        <com.donkingliang.labels.LabelsView
+            android:id="@+id/lv_sort"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_8"
+            android:layout_marginRight="@dimen/dp_8"
+            app:labelTextWidth="@dimen/dp_100"
+            app:labelTextHeight="@dimen/dp_32"
+            app:labelBackground="@drawable/label_bg"
+            app:labelTextColor="@drawable/label_text_color"
+            app:selectType="SINGLE_IRREVOCABLY"
+            app:labelTextSize="@dimen/sp_12"
+            app:lineMargin="@dimen/dp_16"
+            app:wordMargin="@dimen/dp_16"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_price_view"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/dp_16"
+        android:paddingBottom="@dimen/dp_16"
+        android:background="@drawable/shape_drop_down_view"
+        app:layout_constraintTop_toBottomOf="@id/cl_header">
+
+        <com.donkingliang.labels.LabelsView
+            android:id="@+id/lv_price"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_8"
+            android:layout_marginRight="@dimen/dp_8"
+            app:labelTextWidth="@dimen/dp_100"
+            app:labelTextHeight="@dimen/dp_32"
+            app:labelBackground="@drawable/label_bg"
+            app:labelTextColor="@drawable/label_text_color"
+            app:selectType="SINGLE_IRREVOCABLY"
+            app:labelTextSize="@dimen/sp_12"
+            app:lineMargin="@dimen/dp_16"
+            app:wordMargin="@dimen/dp_16"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

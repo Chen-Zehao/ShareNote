@@ -126,6 +126,7 @@ public class LoginActivity extends BaseMvpActivity<ILoginView, LoginPresenter> i
     }
 
 
+    @Override
     public boolean handleMessage(Message msg) {
         int event = msg.arg1;
         int result = msg.arg2;
@@ -223,6 +224,7 @@ public class LoginActivity extends BaseMvpActivity<ILoginView, LoginPresenter> i
     }
 
     // 使用完EventHandler需注销，否则可能出现内存泄漏
+    @Override
     protected void onDestroy() {
         // 销毁回调监听接口
         SMSSDK.unregisterAllEventHandler();

@@ -4,7 +4,7 @@ import com.scnu.base.BasePresenter;
 import com.scnu.model.Macro;
 import com.scnu.model.UserModel;
 import com.scnu.sharenote.login.ui.ILoginView;
-import com.scnu.source.beans.LoginResBean;
+import com.scnu.source.beans.UserResBean;
 import com.scnu.source.http.CustomObserver;
 import com.scnu.source.http.OnlineDataSource;
 import com.scnu.utils.MyApplication;
@@ -22,9 +22,9 @@ public class LoginPresenter extends BasePresenter<ILoginView> {
      * 用户登录
      */
     public void userLogin(String mobileNo){
-        OnlineDataSource.getInstance().userLogin(mobileNo, new CustomObserver<LoginResBean>(getContext(),((AppCompatActivity)getContext()).getSupportFragmentManager()) {
+        OnlineDataSource.getInstance().userLogin(mobileNo, new CustomObserver<UserResBean>(getContext(),((AppCompatActivity)getContext()).getSupportFragmentManager()) {
             @Override
-            public void onSuccess(LoginResBean result) {
+            public void onSuccess(UserResBean result) {
                 if(null != result.getData()){
                     UserModel user = result.getData();
                     MyApplication.saveObject(Macro.KEY_USER,user);

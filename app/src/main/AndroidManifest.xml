@@ -24,8 +24,8 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:requestLegacyExternalStorage="true"
         android:theme="@style/AppTheme">
-
         <activity
             android:name=".SplashActivity"
             android:screenOrientation="portrait"
@@ -44,32 +44,55 @@
             android:name=".login.ui.LoginActivity"
             android:screenOrientation="portrait"
             android:theme="@style/NoAniTheme"
-            android:windowSoftInputMode="stateHidden"></activity>
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".main.ui.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/DefaultCityPickerTheme"
-            android:windowSoftInputMode="stateHidden"></activity>
+            android:windowSoftInputMode="stateHidden"
+            android:launchMode="singleTop" />
         <activity
             android:name=".publish.ui.PublishActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"></activity>
+            android:windowSoftInputMode="stateHidden"
+            android:launchMode="singleTop" />
         <activity
-            android:name=".detail.DetailActivity"
+            android:name=".detail.ui.DetailActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"></activity>
+            android:windowSoftInputMode="adjustResize|adjustUnspecified|stateHidden"
+            android:launchMode="singleTop"/>
+        <activity
+            android:name=".search.ui.SearchActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"
+            android:launchMode="singleTop"/>
         <activity
             android:name=".main.fragment.mine.ui.activity.SettingActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"></activity>
+            android:windowSoftInputMode="stateHidden"
+            android:launchMode="singleTop" />
         <activity
             android:name=".main.fragment.mine.ui.activity.EditDataActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"></activity>
+            android:windowSoftInputMode="stateHidden"
+            android:launchMode="singleTop"/>
         <activity
             android:name=".main.fragment.mine.ui.activity.SafetyActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"></activity>
+            android:windowSoftInputMode="stateHidden"
+            android:launchMode="singleTop"/>
+        <activity
+            android:name=".main.fragment.mine.ui.activity.UserAttentionActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"/>
+        <activity
+            android:name=".main.fragment.mine.ui.activity.UserFollowersActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".main.fragment.mine.ui.activity.OtherUserActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"/>
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -88,7 +111,7 @@
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
-            android:process=":remote"></service>
+            android:process=":remote" />
     </application>
 
 </manifest>

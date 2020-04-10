@@ -34,4 +34,8 @@ public class LazyLoadingPagerAdapter extends FragmentPagerAdapter {
         return mFragments.size();
     }
 
+    @Override
+    public int getItemPosition(@NonNull Object object) {
+        return super.getItemPosition(object);
+    }
 }

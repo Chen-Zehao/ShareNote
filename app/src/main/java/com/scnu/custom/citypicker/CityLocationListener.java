@@ -27,6 +27,8 @@ public class CityLocationListener extends BDAbstractLocationListener {
             city = city.substring(0,city.indexOf("市"));
         String district = location.getDistrict();    //获取区县
         String street = location.getStreet();    //获取街道信息
-        EventBus.getDefault().post(new LocationInfoEvent(city,province));
+        double latitude = location.getLatitude();
+        double longtitude = location.getLongitude();
+        EventBus.getDefault().post(new LocationInfoEvent(city,province,latitude, longtitude));
     }
 }

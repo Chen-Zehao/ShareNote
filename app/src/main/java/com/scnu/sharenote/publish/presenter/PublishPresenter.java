@@ -1,13 +1,20 @@
 package com.scnu.sharenote.publish.presenter;
 
+import com.alibaba.fastjson.JSON;
 import com.scnu.base.BasePresenter;
 import com.scnu.model.ArticleModel;
+import com.scnu.model.PriceModel;
 import com.scnu.sharenote.publish.ui.IPublishView;
 import com.scnu.source.beans.BaseBean;
+import com.scnu.source.beans.PriceResBean;
 import com.scnu.source.beans.ThemeResBean;
 import com.scnu.source.http.CustomObserver;
 import com.scnu.source.http.OnlineDataSource;
+import com.scnu.utils.LogUtils;
 import com.scnu.utils.ToastUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -37,6 +44,34 @@ public class PublishPresenter extends BasePresenter<IPublishView> {
             }
         });
     }
+
+    public void getThemePriceList(String theme){
+        OnlineDataSource.getInstance().getThemePriceList(theme, new CustomObserver<PriceResBean>(getContext(),((AppCompatActivity)getContext()).getSupportFragmentManager()) {
+            @Override
+            public void onSuccess(PriceResBean result) {
+                if(null != result.getData() && !result.getData().isEmpty()){
+                    List<PriceModel> priceList = new ArrayList<>();
+                    for (String datum : result.getData()) {
+                        PriceModel priceModel = new PriceModel();
+                        priceModel.setPrice(datum);
+                        priceList.add(priceModel);
+                    }
+                    if(isActivityAlive()){
+                        getMvpView().getPriceListSuccess(priceList);
+                    }
+                }else{
+                    ToastUtils.showToast(getContext(),"暂无价格区间数据");
+                }
+            }
+
+            @Override
+            public void onFail(Throwable exception) {
+                super.onFail(exception);
+                ToastUtils.showToast(getContext(),exception.toString());
+            }
+        });
+    }
+
 
 
     /**

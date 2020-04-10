@@ -1,103 +1,136 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_header"
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_200"
-        android:background="@mipmap/personal_header_bg"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="wrap_content"
+        android:background="@color/bg_main"
+        app:elevation="0dp">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_header"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_200"
+            app:layout_scrollFlags="scroll"
+            android:background="@mipmap/personal_header_bg">
 
-        <TextView
-            android:id="@+id/tv_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_24"
-            android:layout_marginTop="@dimen/dp_14"
-            android:textSize="@dimen/sp_16"
-            android:textColor="@color/text_white"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_24"
+                android:layout_marginTop="@dimen/dp_14"
+                android:textSize="@dimen/sp_16"
+                android:textColor="@color/text_white"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
 
-        <com.scnu.custom.CircleImageView
-            android:id="@+id/iv_avatar"
-            android:layout_width="@dimen/dp_88"
-            android:layout_height="@dimen/dp_88"
-            android:layout_marginLeft="@dimen/dp_24"
-            android:layout_marginBottom="@dimen/dp_24"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            <com.scnu.custom.CircleImageView
+                android:id="@+id/iv_avatar"
+                android:layout_width="@dimen/dp_88"
+                android:layout_height="@dimen/dp_88"
+                android:layout_marginLeft="@dimen/dp_24"
+                android:layout_marginBottom="@dimen/dp_24"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/iv_setting"
-            android:layout_width="@dimen/dp_24"
-            android:layout_height="@dimen/dp_24"
-            app:srcCompat="@drawable/ic_personal_ic_settings"
-            android:layout_marginTop="@dimen/dp_12"
-            android:layout_marginRight="@dimen/dp_16"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/iv_setting"
+                android:layout_width="@dimen/dp_24"
+                android:layout_height="@dimen/dp_24"
+                app:srcCompat="@drawable/ic_personal_ic_settings"
+                android:layout_marginTop="@dimen/dp_12"
+                android:layout_marginRight="@dimen/dp_16"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/iv_message"
-            android:layout_width="@dimen/dp_24"
-            android:layout_height="@dimen/dp_24"
-            android:layout_marginRight="@dimen/dp_24"
-            app:srcCompat="@drawable/ic_personal_ic_message"
-            app:layout_constraintTop_toTopOf="@id/iv_setting"
-            app:layout_constraintEnd_toStartOf="@id/iv_setting"/>
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/iv_message"
+                android:layout_width="@dimen/dp_24"
+                android:layout_height="@dimen/dp_24"
+                android:visibility="gone"
+                android:layout_marginRight="@dimen/dp_24"
+                app:srcCompat="@drawable/ic_personal_ic_message"
+                app:layout_constraintTop_toTopOf="@id/iv_setting"
+                app:layout_constraintEnd_toStartOf="@id/iv_setting"/>
 
-        <TextView
-            android:id="@+id/tv_fens_num"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/dp_20"
-            android:text="0"
-            android:textSize="@dimen/sp_16"
-            android:textColor="@color/text_black"
-            app:layout_constraintStart_toStartOf="@id/tv_fens"
-            app:layout_constraintEnd_toEndOf="@id/tv_fens"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            <TextView
+                android:id="@+id/tv_fens_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dp_20"
+                android:text="0"
+                android:textSize="@dimen/sp_16"
+                android:textColor="@color/text_black"
+                app:layout_constraintStart_toStartOf="@id/tv_fens"
+                app:layout_constraintEnd_toEndOf="@id/tv_fens"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
-        <TextView
-            android:id="@+id/tv_fens"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="粉丝"
-            android:textSize="@dimen/sp_12"
-            android:textColor="@color/caption_text_color"
-            android:layout_marginBottom="@dimen/dp_8"
-            android:layout_marginRight="@dimen/dp_32"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/tv_fens_num"/>
+            <TextView
+                android:id="@+id/tv_fens"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="粉丝"
+                android:textSize="@dimen/sp_12"
+                android:textColor="@color/caption_text_color"
+                android:layout_marginBottom="@dimen/dp_8"
+                android:layout_marginRight="@dimen/dp_32"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/tv_fens_num"/>
 
-        <TextView
-            android:id="@+id/tv_follow_num"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/dp_20"
-            android:text="0"
-            android:textSize="@dimen/sp_16"
-            android:textColor="@color/text_black"
-            app:layout_constraintStart_toStartOf="@id/tv_follow"
-            app:layout_constraintEnd_toEndOf="@id/tv_follow"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            <TextView
+                android:id="@+id/tv_follow_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dp_20"
+                android:text="0"
+                android:textSize="@dimen/sp_16"
+                android:textColor="@color/text_black"
+                app:layout_constraintStart_toStartOf="@id/tv_follow"
+                app:layout_constraintEnd_toEndOf="@id/tv_follow"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
-        <TextView
-            android:id="@+id/tv_follow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="关注"
-            android:textSize="@dimen/sp_12"
-            android:textColor="@color/caption_text_color"
-            android:layout_marginBottom="@dimen/dp_8"
-            android:layout_marginRight="@dimen/dp_60"
-            app:layout_constraintEnd_toStartOf="@id/tv_fens"
-            app:layout_constraintBottom_toTopOf="@id/tv_fens_num"/>
+            <TextView
+                android:id="@+id/tv_follow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="关注"
+                android:textSize="@dimen/sp_12"
+                android:textColor="@color/caption_text_color"
+                android:layout_marginBottom="@dimen/dp_8"
+                android:layout_marginRight="@dimen/dp_60"
+                app:layout_constraintEnd_toStartOf="@id/tv_fens"
+                app:layout_constraintBottom_toTopOf="@id/tv_fens_num"/>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <com.flyco.tablayout.SlidingTabLayout
+            android:id="@+id/tl_mine"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_48"
+            android:background="@color/white"
+            android:paddingLeft="@dimen/dp_72"
+            android:paddingRight="@dimen/dp_72"
+            app:tl_indicator_color="#D9000000"
+            app:tl_indicator_height="@dimen/dp_2"
+            app:tl_indicator_width="@dimen/dp_24"
+            app:tl_textUnselectColor="#A6000000"
+            app:tl_textSelectColor="#D9000000"
+            app:tl_textsize="@dimen/sp_16"
+            app:tl_tab_space_equal="true"/>
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/vp_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    </androidx.viewpager.widget.ViewPager>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+

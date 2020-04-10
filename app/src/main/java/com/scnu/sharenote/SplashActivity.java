@@ -14,6 +14,8 @@ import com.scnu.utils.MyApplication;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.crypto.Mac;
+
 import butterknife.ButterKnife;
 
 public class SplashActivity extends Activity {
@@ -35,7 +37,7 @@ public class SplashActivity extends Activity {
             @Override
             public void run() {
                 //要执行的操作
-                if(isLogin.equals("Y")){
+                if(isLogin.equals("Y")&& null != MyApplication.getObject(Macro.KEY_USER)){
                     startActivity(new Intent(mContext, MainActivity.class));
                 }else{
                     startActivity(new Intent(mContext, LoginActivity.class));

@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Created by ChenZehao
  * on 2020/2/21
  */
-public class LoginResBean extends BaseBean implements Serializable {
+public class UserResBean extends BaseBean implements Serializable {
     private UserModel data;
 
     public UserModel getData() {

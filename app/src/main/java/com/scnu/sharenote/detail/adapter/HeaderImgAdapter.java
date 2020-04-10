@@ -24,6 +24,10 @@ public class HeaderImgAdapter extends PagerAdapter {
         this.viewPager = viewPager;
     }
 
+    public List<ImageView> getImageList() {
+        return imageList;
+    }
+
     @Override
     public int getCount() {
         return imageList.size();

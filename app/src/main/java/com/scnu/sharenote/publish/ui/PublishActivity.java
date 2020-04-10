@@ -1,8 +1,11 @@
 package com.scnu.sharenote.publish.ui;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -12,7 +15,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
@@ -23,6 +28,7 @@ import com.scnu.model.ArticleModel;
 import com.scnu.model.LocationModel;
 import com.scnu.model.Macro;
 import com.scnu.model.PictureModel;
+import com.scnu.model.PriceModel;
 import com.scnu.model.ThemeModel;
 import com.scnu.model.UserModel;
 import com.scnu.sharenote.R;
@@ -30,18 +36,23 @@ import com.scnu.sharenote.publish.adapter.FullyGridLayoutManager;
 import com.scnu.sharenote.publish.adapter.PictureAdapter;
 import com.scnu.sharenote.publish.presenter.PublishPresenter;
 import com.scnu.sharenote.publish.ui.dialog.ChooseLocationDialog;
+import com.scnu.sharenote.publish.ui.dialog.ChoosePriceDialog;
 import com.scnu.sharenote.publish.ui.dialog.ChooseThemeDialog;
 import com.scnu.utils.DateUtils;
+import com.scnu.utils.GlideCacheEngine;
 import com.scnu.utils.GlideEngine;
 import com.scnu.utils.ImageUtil;
+import com.scnu.utils.LogUtils;
 import com.scnu.utils.MyApplication;
 import com.scnu.utils.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -49,6 +60,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
+
+import static com.scnu.model.Macro.REQUEST_PERMISSION_ACCESS_FINE_LOCATION;
 
 /**
  * Created by ChenZehao
@@ -87,6 +100,16 @@ public class PublishActivity extends BaseMvpActivity<IPublishView, PublishPresen
     ConstraintLayout clAddress;
     @BindView(R.id.bt_publish)
     Button btPublish;
+    @BindView(R.id.iv_price)
+    AppCompatImageView ivPrice;
+    @BindView(R.id.tv_price_name)
+    TextView tvPriceName;
+    @BindView(R.id.iv_price_pulldown)
+    AppCompatImageView ivPricePulldown;
+    @BindView(R.id.tv_price)
+    TextView tvPrice;
+    @BindView(R.id.cl_price)
+    ConstraintLayout clPrice;
 
     private PictureAdapter pictureAdapter;
     private int maxSelectNum = 9;
@@ -94,8 +117,10 @@ public class PublishActivity extends BaseMvpActivity<IPublishView, PublishPresen
     private PopupWindow pop;
     private ChooseThemeDialog chooseThemeDialog;
     private ChooseLocationDialog chooseLocationDialog;
+    private ChoosePriceDialog choosePriceDialog;
     private LocationModel locationModel = new LocationModel();
     private String themeText = "";
+    private String priceText = "";
 
     @Override
     public int getLayoutId() {
@@ -109,7 +134,8 @@ public class PublishActivity extends BaseMvpActivity<IPublishView, PublishPresen
         pictureAdapter.setmOnAddPicClickListener(new PictureAdapter.OnAddPicClickListener() {
             @Override
             public void onAddPicClick() {
-                showPop();
+//                showPop();
+                selectAlbum();
             }
         });
         FullyGridLayoutManager manager = new FullyGridLayoutManager(this, 3, GridLayoutManager.VERTICAL, false);
@@ -122,17 +148,19 @@ public class PublishActivity extends BaseMvpActivity<IPublishView, PublishPresen
                     LocalMedia media = selectList.get(position);
                     String pictureType = media.getMimeType();
                     int mediaType = PictureMimeType.getMimeType(pictureType);
-                    if (mediaType == 1) {// 预览图片 可自定长按保存路径
+                    if (mediaType == PictureConfig.TYPE_IMAGE) {// 预览图片 可自定长按保存路径
                         //PictureSelector.create(NewContentActivity.this).externalPicturePreview(position, "/custom_file", selectList);
                         PictureSelector.create(PublishActivity.this).externalPicturePreview(position, selectList, 0);
-                    } else if (mediaType == 2) {// 预览视频
+                    } else if (mediaType == PictureConfig.TYPE_VIDEO) {// 预览视频
                         PictureSelector.create(PublishActivity.this).externalPictureVideo(media.getPath());
-                    } else if (mediaType == 3) {// 预览音频
+                    } else if (mediaType == PictureConfig.TYPE_AUDIO) {// 预览音频
                         PictureSelector.create(PublishActivity.this).externalPictureAudio(media.getPath());
                     }
                 }
             }
         });
+        chooseLocationDialog = new ChooseLocationDialog(mContext);
+        chooseLocationDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.moveUpDialog);
     }
 
     @Override
@@ -155,36 +183,54 @@ public class PublishActivity extends BaseMvpActivity<IPublishView, PublishPresen
     }
 
     @OnClick(R.id.cl_theme)
-    void clThemeClicked(){
+    void clThemeClicked() {
         presenter.getThemeList();
     }
 
     @OnClick(R.id.cl_address)
-    void clAddressClicked(){
-        chooseLocationDialog = new ChooseLocationDialog(mContext);
-        chooseLocationDialog.setStyle(DialogFragment.STYLE_NORMAL,R.style.moveUpDialog);
-        chooseLocationDialog.show(getSupportFragmentManager(),null);
-        chooseLocationDialog.setOnLocationChooseListener(new ChooseLocationDialog.OnLocationChooseListener() {
-            @Override
-            public void choose(LocationModel location) {
-                tvAddress.setText(location.getName());
-                locationModel = location;
+    void clAddressClicked() {
+        if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            //没有权限需要弹框
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_PERMISSION_ACCESS_FINE_LOCATION);
             }
-        });
+        }else{
+            chooseLocationDialog.show(getSupportFragmentManager(), null);
+            chooseLocationDialog.setOnLocationChooseListener(new ChooseLocationDialog.OnLocationChooseListener() {
+                @Override
+                public void choose(LocationModel location) {
+                    tvAddress.setText(location.getName());
+                    locationModel = location;
+                }
+            });
+        }
+    }
+
+    @OnClick(R.id.cl_price)
+    void clPriceClicked(){
+        if(TextUtils.isEmpty(themeText)){
+            return;
+        }
+        presenter.getThemePriceList(themeText);
     }
 
     @OnClick(R.id.bt_publish)
-    void btnPublishClicked(){
+    void btnPublishClicked() {
         //没有填标题或内容
-        if(TextUtils.isEmpty(etTitle.getText().toString()) || TextUtils.isEmpty(etContent.getText().toString())){
-            ToastUtils.showToast(mContext,"请填写标题和内容");
+        if (TextUtils.isEmpty(etTitle.getText().toString()) || TextUtils.isEmpty(etContent.getText().toString())) {
+            ToastUtils.showToast(mContext, "请填写标题和内容");
             return;
         }
         String title = etTitle.getText().toString();
         String content = etContent.getText().toString();
         List<PictureModel> picList = new ArrayList<>();
-        for(LocalMedia localMedia : selectList){
-            String path = localMedia.getCompressPath();
+        for (LocalMedia localMedia : selectList) {
+            String path = "";
+            if(localMedia.isCompressed()){
+                path = localMedia.getCompressPath();
+            }else{
+                path = localMedia.getPath();
+            }
             String fileName = localMedia.getFileName();
             String base64Path = ImageUtil.bitmapToString(path);
             PictureModel picture = new PictureModel();
@@ -195,39 +241,56 @@ public class PublishActivity extends BaseMvpActivity<IPublishView, PublishPresen
         ArticleModel article = new ArticleModel();
         article.setTitle(title);
         article.setContent(content);
-        article.setImageList(picList);
+        article.setPictureList(picList);
         article.setLocation(locationModel);
         UserModel user = (UserModel) MyApplication.getObject(Macro.KEY_USER);
         article.setUserId(user.getUserId());
         article.setTheme(themeText);
         article.setTime(DateUtils.getCurTime());
+        article.setPrice(priceText);
         presenter.publish(article);
     }
 
     @OnTextChanged(R.id.et_title)
-    void onTitleTextChanged(CharSequence text){
-        if (TextUtils.isEmpty(text.toString())){
+    void onTitleTextChanged(CharSequence text) {
+        if (TextUtils.isEmpty(text.toString())) {
             btPublish.setBackground(mContext.getResources().getDrawable(R.drawable.publish_bg_btn_unable));
-        }else{
-            if(TextUtils.isEmpty(etContent.getText().toString())){
+        } else {
+            if (TextUtils.isEmpty(etContent.getText().toString())) {
                 btPublish.setBackground(mContext.getResources().getDrawable(R.drawable.publish_bg_btn_unable));
-            }else {
+            } else {
                 btPublish.setBackground(mContext.getResources().getDrawable(R.drawable.publish_bg_btn_able));
             }
         }
     }
 
     @OnTextChanged(R.id.et_content)
-    void onContentTextChanged(CharSequence text){
-        if (TextUtils.isEmpty(text.toString())){
+    void onContentTextChanged(CharSequence text) {
+        if (TextUtils.isEmpty(text.toString())) {
             btPublish.setBackground(mContext.getResources().getDrawable(R.drawable.publish_bg_btn_unable));
-        }else{
-            if(TextUtils.isEmpty(etTitle.getText().toString())){
+        } else {
+            if (TextUtils.isEmpty(etTitle.getText().toString())) {
                 btPublish.setBackground(mContext.getResources().getDrawable(R.drawable.publish_bg_btn_unable));
-            }else {
+            } else {
                 btPublish.setBackground(mContext.getResources().getDrawable(R.drawable.publish_bg_btn_able));
             }
         }
+    }
+
+    /**
+     * 选择相册
+     */
+    private void selectAlbum(){
+        PictureSelector.create(PublishActivity.this)
+                .openGallery(PictureMimeType.ofImage())
+                .compress(true)
+                .maxSelectNum(maxSelectNum)
+                .minSelectNum(1)
+                .imageSpanCount(4)
+                .loadCacheResourcesCallback(GlideCacheEngine.createCacheEngine())
+                .loadImageEngine(GlideEngine.createGlideEngine())
+                .selectionMode(PictureConfig.MULTIPLE)
+                .forResult(PictureConfig.CHOOSE_REQUEST);
     }
 
     /**
@@ -267,6 +330,7 @@ public class PublishActivity extends BaseMvpActivity<IPublishView, PublishPresen
                                 .openGallery(PictureMimeType.ofImage())
                                 .compress(true)
                                 .maxSelectNum(maxSelectNum)
+                                .loadCacheResourcesCallback(GlideCacheEngine.createCacheEngine())
                                 .minSelectNum(1)
                                 .imageSpanCount(4)
                                 .loadImageEngine(GlideEngine.createGlideEngine())
@@ -276,9 +340,15 @@ public class PublishActivity extends BaseMvpActivity<IPublishView, PublishPresen
                     case R.id.tv_camera:
                         //拍照
                         PictureSelector.create(PublishActivity.this)
-                                .openCamera(PictureMimeType.ofImage())
-                                .compress(true)
-                                .forResult(PictureConfig.CHOOSE_REQUEST);
+                                .openCamera(PictureMimeType.ofImage())// 单独拍照，也可录像或也可音频 看你传入的类型是图片or视频
+                                .loadImageEngine(GlideEngine.createGlideEngine())// 外部传入图片加载引擎，必传项
+                                .loadCacheResourcesCallback(GlideCacheEngine.createCacheEngine())// 获取图片资源缓存，主要是解决华为10部分机型在拷贝文件过多时会出现卡的问题，这里可以判断只在会出现一直转圈问题机型上使用
+                                .previewImage(true)// 是否可预览图片
+                                .compress(true)// 是否压缩
+                                .compressQuality(60)// 图片压缩后输出质量
+                                .cutOutQuality(90)// 裁剪输出质量 默认100
+                                .minimumCompressSize(100)// 小于100kb的图片不压缩
+                                .forResult(PictureConfig.CHOOSE_REQUEST);//结果回调onActivityResult code
                         break;
                 }
                 closePopupWindow();
@@ -302,8 +372,13 @@ public class PublishActivity extends BaseMvpActivity<IPublishView, PublishPresen
         List<LocalMedia> images;
         if (resultCode == RESULT_OK) {
             if (requestCode == PictureConfig.CHOOSE_REQUEST) {// 图片选择结果回调
-
                 images = PictureSelector.obtainMultipleResult(data);
+                for (LocalMedia localMedia:images){
+                    if(TextUtils.isEmpty(localMedia.getFileName())){
+                        String time = DateUtils.getCurYMDHMS();
+                        localMedia.setFileName("IMG_"+time.substring(0,8)+"_"+time.substring(8)+".jpg");
+                    }
+                }
                 selectList.addAll(images);
 
                 //selectList = PictureSelector.obtainMultipleResult(data);
@@ -328,21 +403,58 @@ public class PublishActivity extends BaseMvpActivity<IPublishView, PublishPresen
 
     @Override
     public void getThemeListSuccess(List<ThemeModel> themeModelList) {
-        chooseThemeDialog = new ChooseThemeDialog(mContext,themeModelList);
-        chooseThemeDialog.setStyle(DialogFragment.STYLE_NORMAL,R.style.centerDialog);
-        chooseThemeDialog.show(getSupportFragmentManager(),null);
+        chooseThemeDialog = new ChooseThemeDialog(mContext, themeModelList);
+        chooseThemeDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.centerDialog);
+        chooseThemeDialog.show(getSupportFragmentManager(), null);
         chooseThemeDialog.setThemeChooseListener(new ChooseThemeDialog.ThemeChooseListener() {
             @Override
             public void themeChosen(String theme) {
                 tvTheme.setText(theme);
                 themeText = theme;
+                ivPrice.setImageDrawable(getResources().getDrawable(R.mipmap.publish_ic_price_able));
+                tvPriceName.setTextColor(getResources().getColor(R.color.text_gray));
+                ivPricePulldown.setVisibility(View.VISIBLE);
+                tvPrice.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+    @Override
+    public void getPriceListSuccess(List<PriceModel> priceModelList) {
+        choosePriceDialog = new ChoosePriceDialog(mContext, priceModelList);
+        choosePriceDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.centerDialog);
+        choosePriceDialog.show(getSupportFragmentManager(), null);
+        choosePriceDialog.setPriceChooseListener(new ChoosePriceDialog.PriceChooseListener() {
+            @Override
+            public void priceChosen(String price) {
+                tvPrice.setText(price);
+                priceText = price;
             }
         });
     }
 
     @Override
     public void publishSuccess() {
-        ToastUtils.showToast(mContext,"文章发布成功");
+        ToastUtils.showToast(mContext, "文章发布成功");
         finish();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_PERMISSION_ACCESS_FINE_LOCATION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                chooseLocationDialog.show(getSupportFragmentManager(), null);
+                chooseLocationDialog.setOnLocationChooseListener(new ChooseLocationDialog.OnLocationChooseListener() {
+                    @Override
+                    public void choose(LocationModel location) {
+                        tvAddress.setText(location.getName());
+                        locationModel = location;
+                    }
+                });
+            } else {
+                Toast.makeText(mContext, "位置权限被拒绝", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }

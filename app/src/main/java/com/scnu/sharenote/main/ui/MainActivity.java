@@ -16,6 +16,7 @@ import com.scnu.sharenote.main.presenter.MainPresenter;
 import com.scnu.sharenote.main.fragment.home.ui.HomeFragment;
 import com.scnu.sharenote.main.fragment.mine.ui.fragment.MineFragment;
 import com.scnu.sharenote.publish.ui.PublishActivity;
+import com.scnu.utils.AppManager;
 import com.scnu.utils.MyApplication;
 
 import java.util.ArrayList;
@@ -159,5 +160,21 @@ public class MainActivity extends BaseMvpActivity<IMainView, MainPresenter> impl
     void btnPublishClicked(){
         startActivity(new Intent(mContext, PublishActivity.class));
     }
+
+    /**
+     * double backPress exit
+     */
+    private long mExitTime;
+
+    @Override
+    public void onBackPressed() {
+        if (System.currentTimeMillis() - mExitTime > 2000) {
+            mExitTime = System.currentTimeMillis();
+            playShortToast("请再按一次返回键退出");
+        } else {
+            AppManager.getInstance().AppExit();
+        }
+    }
+
 
 }

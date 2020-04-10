@@ -2,8 +2,10 @@ package com.scnu.sharenote.main.fragment.mine.ui.activity;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Picture;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -18,6 +20,7 @@ import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.bigkoo.pickerview.view.TimePickerView;
+import com.bumptech.glide.Glide;
 import com.lljjcoder.Interface.OnCityItemClickListener;
 import com.lljjcoder.bean.DistrictBean;
 import com.lljjcoder.bean.ProvinceBean;
@@ -34,6 +37,9 @@ import com.luck.picture.lib.entity.LocalMedia;
 import com.scnu.base.ui.activity.BaseMvpActivity;
 import com.scnu.base.ui.view.titlebar.BaseTitleBar;
 import com.scnu.custom.CircleImageView;
+import com.scnu.enums.SexEnum;
+import com.scnu.model.PictureModel;
+import com.scnu.model.UserModel;
 import com.scnu.sharenote.R;
 import com.scnu.sharenote.main.fragment.mine.presenter.EditDataPresenter;
 import com.scnu.sharenote.main.fragment.mine.ui.dialog.InputNameDialog;
@@ -41,7 +47,11 @@ import com.scnu.sharenote.main.fragment.mine.ui.dialog.SelectSexDialog;
 import com.scnu.sharenote.main.ui.MainActivity;
 import com.scnu.sharenote.publish.ui.PublishActivity;
 import com.scnu.utils.GlideEngine;
+import com.scnu.utils.GlideImageLoader;
+import com.scnu.utils.ImageUtil;
 import com.scnu.utils.LogUtils;
+import com.scnu.utils.MyApplication;
+import com.scnu.utils.ServerConfig;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -110,6 +120,8 @@ public class EditDataActivity extends BaseMvpActivity<IEditDataView, EditDataPre
 
     private SelectSexDialog selectSexDialog;
 
+    PictureModel picture = new PictureModel();
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_edit_data;
@@ -117,12 +129,60 @@ public class EditDataActivity extends BaseMvpActivity<IEditDataView, EditDataPre
 
     @Override
     public void initView() {
-        inputNameDialog = new InputNameDialog(mContext);
-        inputNameDialog.setStyle(DialogFragment.STYLE_NORMAL,R.style.centerDialog);
-        selectSexDialog = new SelectSexDialog(mContext);
-        selectSexDialog.setStyle(DialogFragment.STYLE_NORMAL,R.style.centerDialog);
+        UserModel user = (UserModel) MyApplication.getObject("user");
+        if(!TextUtils.isEmpty(user.getAvatarUrl())){
+            GlideImageLoader.getInstance().loadImage(mContext, ServerConfig.getInstance().getAppServerURL() + user.getAvatarUrl(),ivAvatar);
+        }
+        if(!TextUtils.isEmpty(user.getName())) {
+            tvName.setText(user.getName());
+        }
+        if(!TextUtils.isEmpty(user.getSex())) {
+            if(user.getSex().equals(SexEnum.getMALE())){
+                tvSex.setText("男");
+            }else if(user.getSex().equals(SexEnum.getFEMALE())){
+                tvSex.setText("女");
+            }else{
+                tvSex.setText("请选择");
+            }
+        }else{
+            tvSex.setText("请选择");
+        }
+        if(!TextUtils.isEmpty(user.getLocation())) {
+            tvArea.setText(user.getLocation());
+        }else{
+            tvArea.setText("请选择");
+        }
+        if(!TextUtils.isEmpty(user.getBirthDay())) {
+            tvBirthday.setText(user.getBirthDay());
+        }else{
+            tvBirthday.setText("请选择");
+        }
+        initInputNameDialog();
+        initSeleceSexDialog();
         initTimePicker();
         initCityPicker();
+    }
+
+    private void initInputNameDialog() {
+        inputNameDialog = new InputNameDialog(mContext);
+        inputNameDialog.setStyle(DialogFragment.STYLE_NORMAL,R.style.centerDialog);
+        inputNameDialog.setInputNameListener(new InputNameDialog.InputNameListener() {
+            @Override
+            public void input(String name) {
+                presenter.updateUserName(name);
+            }
+        });
+    }
+
+    private void initSeleceSexDialog() {
+        selectSexDialog = new SelectSexDialog(mContext);
+        selectSexDialog.setStyle(DialogFragment.STYLE_NORMAL,R.style.centerDialog);
+        selectSexDialog.setOnSexSelectedListener(new SelectSexDialog.OnSexSelectedListener() {
+            @Override
+            public void onSelect(String sex) {
+                presenter.updateUserSex(sex);
+            }
+        });
     }
 
     private void initTimePicker() {
@@ -131,6 +191,7 @@ public class EditDataActivity extends BaseMvpActivity<IEditDataView, EditDataPre
             public void onTimeSelect(Date date,View v) {//选中事件回调
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 String birthday = simpleDateFormat.format(date);
+                presenter.updateUserBirthday(birthday);
             }
         })
                 .setCancelColor(getResources().getColor(R.color.text_gray))
@@ -160,6 +221,8 @@ public class EditDataActivity extends BaseMvpActivity<IEditDataView, EditDataPre
             public void onSelected(ProvinceBean province, com.lljjcoder.bean.CityBean city, DistrictBean district) {
                 super.onSelected(province, city, district);
                 LogUtils.e(province.getName()+","+city.getName()+","+district.getName());
+                String location = province.getName()+" "+city.getName();
+                presenter.updateUserLocation(location);
             }
 
         });
@@ -321,9 +384,48 @@ public class EditDataActivity extends BaseMvpActivity<IEditDataView, EditDataPre
                 List<LocalMedia> images;
                 images = PictureSelector.obtainMultipleResult(data);
                 if(null != images && !images.isEmpty()){
-                    LogUtils.e(images.get(0).getCutPath());
+                    picture.setFileName(images.get(0).getFileName());
+                    String path = images.get(0).getCompressPath();
+                    String base64Path = ImageUtil.bitmapToString(path);
+                    picture.setPictureBase64(base64Path);
+                    presenter.updateUserAvatar(picture);
                 }
             }
         }
     }
+
+    @Override
+    public void updateUserNameSuccess(String name) {
+        tvName.setText(name);
+        ToastUtils.showShortToast(mContext,"用户名修改成功");
+    }
+
+    @Override
+    public void updateUserAvatarSuccess(String avatarUrl) {
+        GlideImageLoader.getInstance().loadImage(mContext, ServerConfig.getInstance().getAppServerURL() + avatarUrl, ivAvatar);
+        ToastUtils.showShortToast(mContext,"用户头像修改成功");
+    }
+
+    @Override
+    public void updateUserSexSuccess(String sex) {
+        if(sex.equals(SexEnum.getMALE())){
+            tvSex.setText("男");
+        }else if(sex.equals(SexEnum.getFEMALE())){
+            tvSex.setText("女");
+        }
+        ToastUtils.showShortToast(mContext,"用户性别修改成功");
+    }
+
+    @Override
+    public void updateUserBirthdaySuccess(String birthday) {
+        tvBirthday.setText(birthday);
+        ToastUtils.showShortToast(mContext,"用户生日修改成功");
+    }
+
+    @Override
+    public void updateUserLocationSuccess(String location) {
+        tvArea.setText(location);
+        ToastUtils.showShortToast(mContext,"用户地区修改成功");
+    }
+
 }

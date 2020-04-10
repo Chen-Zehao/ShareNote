@@ -21,7 +21,10 @@ public class ArticleModel implements Serializable {
 
     private String picture;//封面图片
 
-    private List<PictureModel> imageList;//图片列表
+    private List<PictureModel> pictureList;//发布图片列表
+
+    @JSONField(serialize = false)
+    private List<String> imageList;//接收图片列表
 
     private String theme;//主题
 
@@ -44,11 +47,22 @@ public class ArticleModel implements Serializable {
 
     private String time;//发布时间
 
+    private String price;//价格区间
+
+    private boolean likeFlag;//是否点赞
+
+    private boolean collectionFlag;//是否收藏
+
+    private boolean attentionFlag;//是否关注
+
+    private double distance;//距离
+
     public ArticleModel(){
         issueId = "";
         title = "";
         content = "";
         picture = "";
+        pictureList = new ArrayList<>();
         imageList = new ArrayList<>();
         theme = "";
         location = new LocationModel();
@@ -59,6 +73,11 @@ public class ArticleModel implements Serializable {
         userAvatar = "";
         userName = "";
         time = "";
+        price = "";
+        likeFlag = false;
+        collectionFlag = false;
+        attentionFlag = false;
+        distance = -1;
     }
 
     public String getIssueId() {
@@ -117,11 +136,27 @@ public class ArticleModel implements Serializable {
         this.picture = picture;
     }
 
-    public List<PictureModel> getImageList() {
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
+    public List<PictureModel> getPictureList() {
+        return pictureList;
+    }
+
+    public void setPictureList(List<PictureModel> pictureList) {
+        this.pictureList = pictureList;
+    }
+
+    public List<String> getImageList() {
         return imageList;
     }
 
-    public void setImageList(List<PictureModel> imageList) {
+    public void setImageList(List<String> imageList) {
         this.imageList = imageList;
     }
 
@@ -171,5 +206,37 @@ public class ArticleModel implements Serializable {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public boolean isLikeFlag() {
+        return likeFlag;
+    }
+
+    public void setLikeFlag(boolean likeFlag) {
+        this.likeFlag = likeFlag;
+    }
+
+    public boolean isCollectionFlag() {
+        return collectionFlag;
+    }
+
+    public void setCollectionFlag(boolean collectionFlag) {
+        this.collectionFlag = collectionFlag;
+    }
+
+    public boolean isAttentionFlag() {
+        return attentionFlag;
+    }
+
+    public void setAttentionFlag(boolean attentionFlag) {
+        this.attentionFlag = attentionFlag;
+    }
+
+    public double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(double distance) {
+        this.distance = distance;
     }
 }

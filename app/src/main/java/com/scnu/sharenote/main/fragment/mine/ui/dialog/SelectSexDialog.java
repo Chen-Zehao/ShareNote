@@ -11,6 +11,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.scnu.base.ui.dialog.BaseDialogFragment;
+import com.scnu.enums.SexEnum;
 import com.scnu.model.UserModel;
 import com.scnu.sharenote.R;
 import com.scnu.utils.LogUtils;
@@ -62,10 +63,12 @@ public class SelectSexDialog extends BaseDialogFragment {
 
     @OnClick(R.id.bt_confirm)
     void btConfirmClicked() {
-        if(rbMale.isChecked()){
-            LogUtils.e("男");
-        }else{
-            LogUtils.e("女");
+        if(null != onSexSelectedListener){
+            if(rbMale.isChecked()){
+                onSexSelectedListener.onSelect(SexEnum.getMALE());
+            }else{
+                onSexSelectedListener.onSelect(SexEnum.getFEMALE());
+            }
         }
         dismiss();
     }
@@ -80,5 +83,15 @@ public class SelectSexDialog extends BaseDialogFragment {
         }else{
             rbFemale.setSelected(true);
         }
+    }
+
+    public interface OnSexSelectedListener{
+        void onSelect(String sex);
+    }
+
+    private OnSexSelectedListener onSexSelectedListener;
+
+    public void setOnSexSelectedListener(OnSexSelectedListener onSexSelectedListener) {
+        this.onSexSelectedListener = onSexSelectedListener;
     }
 }

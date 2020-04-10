@@ -39,41 +39,21 @@
         app:layout_constraintStart_toStartOf="@id/tv_name"
         app:layout_constraintTop_toBottomOf="@id/tv_name"/>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_follow"
-        android:layout_width="@dimen/dp_64"
+    <TextView
+        android:id="@+id/tv_follow"
+        android:layout_width="wrap_content"
         android:layout_height="@dimen/dp_24"
+        android:gravity="center"
+        android:paddingLeft="@dimen/dp_12"
+        android:paddingRight="@dimen/dp_12"
+        android:textColor="#FFE67445"
+        android:textSize="@dimen/sp_12"
+        android:text="＋关注"
         android:background="@drawable/home_shape_follow"
         android:layout_marginTop="@dimen/dp_16"
         android:layout_marginRight="@dimen/dp_16"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" >
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/iv_follow"
-            android:layout_width="@dimen/dp_16"
-            android:layout_height="@dimen/dp_16"
-            app:srcCompat="@drawable/ic_common_follow"
-            app:layout_constraintHorizontal_bias="0.2"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
-
-        <TextView
-            android:id="@+id/tv_follow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#FFE67445"
-            android:textSize="@dimen/sp_12"
-            android:text="关注"
-            app:layout_constraintHorizontal_bias="0.7"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <FrameLayout
         android:id="@+id/fl_content"
@@ -82,7 +62,7 @@
         android:layout_marginTop="@dimen/dp_12"
         app:layout_constraintTop_toBottomOf="@id/tv_time"
         app:layout_constraintStart_toStartOf="@id/iv_avatar"
-        app:layout_constraintEnd_toEndOf="@id/cl_follow">
+        app:layout_constraintEnd_toEndOf="@id/tv_follow">
         <TextView
             android:id="@+id/tv_content"
             android:layout_width="wrap_content"
@@ -93,33 +73,15 @@
 
     <ImageView
         android:id="@+id/iv_cover"
-        android:layout_width="@dimen/dp_328"
-        android:layout_height="@dimen/dp_184"
-        android:layout_marginTop="@dimen/dp_8"
-        app:layout_constraintTop_toBottomOf="@id/fl_content"
-        app:layout_constraintStart_toStartOf="@id/fl_content"
-        app:layout_constraintEnd_toEndOf="@id/fl_content"/>
-
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/iv_collection"
-        android:layout_width="@dimen/dp_24"
-        android:layout_height="@dimen/dp_24"
-        app:srcCompat="@drawable/ic_common_collection"
-        android:layout_marginTop="@dimen/dp_16"
-        app:layout_constraintTop_toBottomOf="@id/iv_cover"
-        app:layout_constraintStart_toStartOf="@id/iv_cover"/>
-
-    <TextView
-        android:id="@+id/tv_collection_num"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/dp_0"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/sp_12"
-        android:textColor="#A6000000"
-        android:text="0"
-        android:layout_marginLeft="@dimen/dp_4"
-        app:layout_constraintTop_toTopOf="@id/iv_collection"
-        app:layout_constraintBottom_toBottomOf="@id/iv_collection"
-        app:layout_constraintStart_toEndOf="@id/iv_collection"/>
+        android:layout_marginLeft="@dimen/dp_16"
+        android:layout_marginRight="@dimen/dp_16"
+        android:layout_marginTop="@dimen/dp_8"
+        android:adjustViewBounds="true"
+        app:layout_constraintTop_toBottomOf="@id/fl_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/iv_like"
@@ -127,9 +89,8 @@
         android:layout_height="@dimen/dp_24"
         app:srcCompat="@drawable/ic_common_like"
         android:layout_marginTop="@dimen/dp_16"
-        android:layout_marginLeft="@dimen/dp_42"
         app:layout_constraintTop_toBottomOf="@id/iv_cover"
-        app:layout_constraintStart_toEndOf="@id/iv_collection"/>
+        app:layout_constraintStart_toStartOf="@id/fl_content"/>
 
     <TextView
         android:id="@+id/tv_like_num"
@@ -144,6 +105,28 @@
         app:layout_constraintStart_toEndOf="@id/iv_like"/>
 
     <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/iv_collection"
+        android:layout_width="@dimen/dp_24"
+        android:layout_height="@dimen/dp_24"
+        app:srcCompat="@drawable/ic_common_collection"
+        android:layout_marginTop="@dimen/dp_16"
+        android:layout_marginLeft="@dimen/dp_42"
+        app:layout_constraintTop_toBottomOf="@id/iv_cover"
+        app:layout_constraintStart_toEndOf="@id/iv_like"/>
+
+    <TextView
+        android:id="@+id/tv_collection_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/sp_12"
+        android:textColor="#A6000000"
+        android:text="0"
+        android:layout_marginLeft="@dimen/dp_4"
+        app:layout_constraintTop_toTopOf="@id/iv_collection"
+        app:layout_constraintBottom_toBottomOf="@id/iv_collection"
+        app:layout_constraintStart_toEndOf="@id/iv_collection"/>
+
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/iv_comment"
         android:layout_width="@dimen/dp_24"
         android:layout_height="@dimen/dp_24"
@@ -151,7 +134,7 @@
         android:layout_marginTop="@dimen/dp_16"
         android:layout_marginLeft="@dimen/dp_42"
         app:layout_constraintTop_toBottomOf="@id/iv_cover"
-        app:layout_constraintStart_toEndOf="@id/iv_like"/>
+        app:layout_constraintStart_toEndOf="@id/iv_collection"/>
 
     <TextView
         android:id="@+id/tv_comment_num"
@@ -172,19 +155,20 @@
         android:layout_marginTop="@dimen/dp_16"
         android:paddingLeft="@dimen/dp_8"
         android:paddingRight="@dimen/dp_8"
+        android:layout_marginRight="@dimen/dp_16"
         android:background="@drawable/shape_location"
         app:layout_constraintTop_toBottomOf="@id/iv_cover"
-        app:layout_constraintEnd_toEndOf="@id/iv_cover">
+        app:layout_constraintEnd_toEndOf="parent">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/iv_location"
             android:layout_width="@dimen/dp_16"
             android:layout_height="@dimen/dp_16"
-            app:srcCompat="@drawable/ic_common_address"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tv_location"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/tv_location"/>
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_common_address" />
 
         <TextView
             android:id="@+id/tv_location"

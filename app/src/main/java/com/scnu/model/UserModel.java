@@ -1,6 +1,6 @@
 package com.scnu.model;
 
-import com.scnu.enums.Enums;
+import com.scnu.enums.SexEnum;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -23,21 +23,36 @@ public class UserModel implements Serializable {
 
     private String avatarUrl;//用户头像
 
-    private List<String> collectionList;//收藏文章id列表
+    private String birthDay;//用户生日
 
-    private List<String> likeList;//点赞文章id列表
+    private String location;//用户位置
 
-    private List<String> attentionUserList;//关注用户id列表
+    private int attentionNum;//关注数
+
+    private int fansNum;//粉丝数
+
+    private String collectionList;//收藏文章id列表
+
+    private String likeList;//点赞文章id列表
+
+    private String attentionUserList;//关注用户id列表
+
+    private boolean attentionFlag = false;//是否被用户关注
 
     public UserModel(){
         mobileNo = "";
         name = "";
-        sex = Enums.getUNKNOWN();
+        sex = SexEnum.getUNKNOWN();
         userId = "";
         avatarUrl = "";
-        attentionUserList = new ArrayList<>();
-        collectionList = new ArrayList<>();
-        likeList = new ArrayList<>();
+        birthDay = "";
+        location = "";
+        attentionNum = 0;
+        fansNum = 0;
+        attentionUserList = "";
+        collectionList = "";
+        likeList = "";
+        attentionFlag = false;
     }
 
     public String getMobileNo() {
@@ -46,6 +61,14 @@ public class UserModel implements Serializable {
 
     public void setMobileNo(String mobileNo) {
         this.mobileNo = mobileNo;
+    }
+
+    public int getAttentionNum() {
+        return attentionNum;
+    }
+
+    public void setAttentionNum(int attentionNum) {
+        this.attentionNum = attentionNum;
     }
 
     public String getName() {
@@ -80,27 +103,59 @@ public class UserModel implements Serializable {
         this.avatarUrl = avatarUrl;
     }
 
-    public List<String> getCollectionList() {
+    public String getLocation() {
+        return location;
+    }
+
+    public String getBirthDay() {
+        return birthDay;
+    }
+
+    public void setBirthDay(String birthDay) {
+        this.birthDay = birthDay;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getCollectionList() {
         return collectionList;
     }
 
-    public void setCollectionList(List<String> collectionList) {
+    public void setCollectionList(String collectionList) {
         this.collectionList = collectionList;
     }
 
-    public List<String> getLikeList() {
+    public String getLikeList() {
         return likeList;
     }
 
-    public void setLikeList(List<String> likeList) {
+    public void setLikeList(String likeList) {
         this.likeList = likeList;
     }
 
-    public List<String> getAttentionUserList() {
+    public String getAttentionUserList() {
         return attentionUserList;
     }
 
-    public void setAttentionUserList(List<String> attentionUserList) {
+    public void setAttentionUserList(String attentionUserList) {
         this.attentionUserList = attentionUserList;
+    }
+
+    public int getFansNum() {
+        return fansNum;
+    }
+
+    public void setFansNum(int fansNum) {
+        this.fansNum = fansNum;
+    }
+
+    public boolean isAttentionFlag() {
+        return attentionFlag;
+    }
+
+    public void setAttentionFlag(boolean attentionFlag) {
+        this.attentionFlag = attentionFlag;
     }
 }
